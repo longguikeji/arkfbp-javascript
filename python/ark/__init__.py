@@ -1,5 +1,6 @@
 from abc import abstractmethod
 import copy
+import requests
 
 
 class State:
@@ -109,8 +110,19 @@ class NopNode(Node):
 
 class APINode(Node):
 
+    name = 'api'
+    mode = 'self' # delegate
+
+    url = ''
+    method = 'GET'
+    params = None
+
     def run(self):
-        print('api node')
+        print('api node', self.mode)
+        if self.mode == 'self':
+            if self.method == 'GET':
+                res = requests.get(self.url)
+                return res.json()
 
 
 class IFNode(Node):
@@ -136,6 +148,28 @@ class IFNode(Node):
 
     def negative_statement(self):
         pass
+
+
+class LoopNode(Node):
+
+    init = None
+    condition = None
+    post = None
+
+    def init(self):
+        pass
+
+    def condition(self):
+        return False
+
+    def post(self):
+        pass
+
+    def run(self, *args, **kwargs):
+        self.init()
+
+        while bool(self.condition()):
+            self.post()
 
 
 class GraphNode:
@@ -194,24 +228,6 @@ class Flow:
         return None
 
     def main(self):
-        # previous_outputs = None
-
-        # for node_cls in self.graph.nodes:
-        #     node = node_cls()
-        #     node.state = self.state
-
-        #     if not isinstance(node, Node):
-        #         raise Exception('{} is not instance of Node', node_cls)
-
-        #     if previous_outputs is not None:
-        #         node.inputs = previous_outputs
-
-        #     outputs = node.run()
-        #     node.outputs = outputs
-        #     self._stack.push(node)
-
-        #     previous_outputs = outputs
-
         last_outputs = None
 
         graph_node = self.graph.nodes[0]
@@ -231,7 +247,7 @@ class Flow:
             print(node.next, node.name)
             last_outputs = outputs
 
-            if node.name == 'if':
+            if node.name == 'if': # IF Node has two potential next
                 if node.ret:
                     next_graph_node_id = graph_node.get('positive_next', None)
                 else:

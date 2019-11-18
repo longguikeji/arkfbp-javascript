@@ -5,6 +5,7 @@ from ark import (
     StopNode,
     FunctionNode,
     IFNode,
+    APINode,
 )
 
 
@@ -31,28 +32,46 @@ class GetFormDataNode(FunctionNode):
         }
 
 
-class GetUserNode(FunctionNode):
-
-    def run(self, *args, **kwargs):
-        # Todo: connect the database
-
-        # SQL = 'SELECT * FROM user WHERE username=%s AND password=%s'
-
-        return {
-            'user': {
-                'id': 1,
-                'name': 'Rock',
-            }
-        }
+# class GetUserNode(FunctionNode):
+class CallGithubAPINode(APINode):
 
 
-class CheckUserNode(IFNode):
+    url = 'https://api.github.com/orgs/longguikeji/repos'
 
-    def statement(self):
-        if self.inputs.get('user'):
-            return True
 
-        return False
+    # def run(self, *args, **kwargs):
+    #     # Todo: connect the database
+
+    #     # SQL = 'SELECT * FROM user WHERE username=%s AND password=%s'
+
+    #     return {
+    #         'user': {
+    #             'id': 1,
+    #             'name': 'Rock',
+    #         }
+    #     }s
+
+
+# class CheckUserNode(IFNode):
+
+#     def statement(self):
+#         if self.inputs.get('user'):
+#             return True
+
+#         return False
+
+class CheckUserNode(FunctionNode):
+
+    def run(self):
+        ret = []
+        for repo in self.inputs:
+            ret.append({
+                'name': repo['name'],
+                'description': repo['description'],
+            })
+
+        print(ret)
+        return ret
 
 
 class SetTokenNode(FunctionNode):
@@ -110,7 +129,7 @@ class Main(Flow):
                 'next': 3,
             },
             {
-                'cls': GetUserNode,
+                'cls': CallGithubAPINode,
                 'id': 3,
                 'next': 4,
             },
