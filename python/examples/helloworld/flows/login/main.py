@@ -3,8 +3,8 @@ from ark import (
     Graph,
 )
 
-from flows.helloworld.nodes.node1 import Node1
-from flows.helloworld.nodes.node2 import Node2
+from flows.login.nodes.node1 import Node1
+from flows.login.nodes.node2 import Node2
 
 
 class Main(Flow):
