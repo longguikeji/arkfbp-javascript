@@ -73,7 +73,13 @@ class Node:
         self._inputs = v
 
     next = None
-    error = None
+    error_next = None
+
+    def on_completed(self):
+        pass
+
+    def on_error(self):
+        pass
 
 
 class StartNode(Node):
@@ -111,18 +117,43 @@ class NopNode(Node):
 class APINode(Node):
 
     name = 'api'
-    mode = 'self' # delegate
+    mode = 'direct' # proxy
 
     url = ''
     method = 'GET'
+    auth = None
+    headers = None
     params = None
 
     def run(self):
         print('api node', self.mode)
-        if self.mode == 'self':
-            if self.method == 'GET':
-                res = requests.get(self.url)
-                return res.json()
+        if self.mode == 'direct':
+            return self._request_direct()
+
+        elif self.mode == 'proxy':
+            return self._request_proxy()
+
+    def _request_direct(self):
+        kwargs = {}
+        if self.auth is not None:
+            kwargs['auth'] = self.auth
+
+        if self.params is not None:
+            kwargs['data'] = self.params
+
+        if self.headers is not None:
+            kwargs['headers'] = self.headers
+
+        if self.method == 'GET':
+            res = requests.get(self.url, **kwargs)
+            return res.json()
+
+        elif self.method == 'POST':
+            res = requests.post(self.url, **kwargs)
+            return res.json()
+
+    def _request_proxy(self):
+        return None
 
 
 class IFNode(Node):
@@ -227,8 +258,10 @@ class Flow:
     def create_state(self):
         return None
 
-    def main(self):
+    def main(self, inputs=None):
         last_outputs = None
+        if inputs is not None:
+            last_outputs = inputs
 
         graph_node = self.graph.nodes[0]
         while graph_node is not None:
@@ -259,6 +292,8 @@ class Flow:
                 graph_node = self.graph.get_node_by_id(next_graph_node_id)
             else:
                 graph_node = None
+
+        return last_outputs
 
     def debug(self):
         print('---------- DEBUG DEBUG INFORMATION -------------')

@@ -11,7 +11,16 @@ class Main(Flow):
 
     def create_graph(self):
         g = Graph()
-        g.nodes = [Node1, Node2]
-        g.edges = ['']
+        g.nodes = [
+            {
+                'cls': Node1,
+                'id': 1,
+                'next': 2,
+            },
+            {
+                'cls': Node2,
+                'id': 2,
+            },
+        ]
 
         return g
