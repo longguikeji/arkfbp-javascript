@@ -27,11 +27,24 @@ password: string
 
 ## 数据结构
 
+
+
+
 ### 用户表
 
-id | username | password
+CREATE TABLE users(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username CHAR(50) NOT NULL,
+    password CHAR(50) NOT NULL,
+    name CHAR(50)
+)
 
 ### Token表
 
-user_id | token
+CREATE TABLE tokens(
+    user_id INTEGER PRIMARY KEY,
+    token CHAR(50) NOT NULL,
+)
+
+
 

@@ -1,21 +1,13 @@
 from ark import (
-    FunctionNode,
+    IFNode,
 )
 
 
-class Node2(FunctionNode):
+class Node2(IFNode):
 
-    def run(self, *args, **kwargs):
-        inputs = self.inputs
+    def expression(self):
+        user_info = self.inputs
+        if user_info:
+            return True
 
-        username = inputs['username']
-        password = inputs['password']
-
-        if username == 'rock' and password == '123456':
-            return {
-                'msg': 'you logged in'
-            }
-
-        return {
-            'msg': 'check failed, please entry correct credentials'
-        }
+        return False
