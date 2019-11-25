@@ -23,13 +23,11 @@ export class Flow {
             const node = new graphNode.cls()
             node.inputs = lastOutputs
             const outputs = await node.run()
-            
 
             lastOutputs = outputs
 
             nextGraphNodeId = graphNode.next
             graphNode = this._graph.getNodeById(graphNode.next)
-            
         }
 
         return lastOutputs

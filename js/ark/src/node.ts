@@ -57,5 +57,3 @@ export class Node {
         this._errorNext = v
     }
 }
-
-
