@@ -1,6 +1,7 @@
 
 export class Node {
 
+    id: string = ''
     name: string = ''
 
     private _outputs: any | null = null
@@ -37,10 +38,6 @@ export class Node {
 
     set state(v: any) {
         this._state = v
-    }
-
-    commitState(cb: (state: any) => any) {
-        this._state = cb(this._state)
     }
 
     async run(): Promise<any> {}

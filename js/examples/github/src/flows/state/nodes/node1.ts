@@ -7,10 +7,12 @@ const log = debug('mylib:randomid')
 export class Node1 extends FunctionNode {
 
     async run() {
-        this.commitState((state) => {
-            this.state.now = new Date()
-            return this.state
+        this.state.commit((state: any) => {
+            state.now = new Date()
+            return state
         })
+
+        return 10
     }
 
 }

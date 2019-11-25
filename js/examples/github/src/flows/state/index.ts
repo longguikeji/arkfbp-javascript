@@ -5,7 +5,6 @@ import { Graph } from './../../../../../ark/src/graph'
 import { Node1 } from './nodes/node1'
 import { Node2 } from './nodes/node2'
 
-
 export class Main extends Flow {
 
     createGraph() {
@@ -19,7 +18,7 @@ export class Main extends Flow {
             {
                 'cls': Node2,
                 'id': 2,
-            }
+            },
         ]
 
         return g

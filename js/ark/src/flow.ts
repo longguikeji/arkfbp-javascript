@@ -1,11 +1,13 @@
+import { State } from './state'
+
 export class Flow {
 
-    private _graph: any 
+    private _graph: any
     private _state: any
 
     constructor() {
         this._graph = this.createGraph()
-        this._state = {}
+        this._state = new State()
     }
 
     createGraph(): any {
@@ -23,11 +25,14 @@ export class Flow {
         let nextGraphNodeId
         while(graphNode !== null) {
             const node = new graphNode.cls()
+            node.id = graphNode.id.toString()
             node.inputs = lastOutputs
             node.state = this._state
             const outputs = await node.run()
+            node.outputs = outputs
 
             lastOutputs = outputs
+            this._state.push(node)
 
             if (node.name === 'if') {
                 // IF Node has two potential next and the ret stored current statement evaluated result
