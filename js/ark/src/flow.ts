@@ -1,9 +1,11 @@
 export class Flow {
 
     private _graph: any 
+    private _state: any
 
     constructor() {
         this._graph = this.createGraph()
+        this._state = {}
     }
 
     createGraph(): any {
@@ -22,6 +24,7 @@ export class Flow {
         while(graphNode !== null) {
             const node = new graphNode.cls()
             node.inputs = lastOutputs
+            node.state = this._state
             const outputs = await node.run()
 
             lastOutputs = outputs

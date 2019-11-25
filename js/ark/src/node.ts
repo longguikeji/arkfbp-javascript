@@ -39,6 +39,10 @@ export class Node {
         this._state = v
     }
 
+    commitState(cb: (state: any) => any) {
+        this._state = cb(this._state)
+    }
+
     async run(): Promise<any> {}
 
     get next() {

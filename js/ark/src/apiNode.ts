@@ -28,7 +28,6 @@ export class APINode extends Node {
     }
 
     async _request_direct() {
-
         if (this.method === 'GET') {
             const resp = await axios.get(this.url)
             return resp.data

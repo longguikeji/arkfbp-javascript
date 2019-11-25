@@ -11,4 +11,10 @@ export default function(app: express.Application) {
         res.send(data)
     })
 
+    app.get('/state', async (req: express.Request, res: express.Response) => {
+        const flowFilename = flowDirectory + '/state'
+        const data = await runWorkflow(flowFilename)
+        res.send(data)
+    })
+
 }
