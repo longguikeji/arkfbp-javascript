@@ -26,7 +26,17 @@ export class Flow {
 
             lastOutputs = outputs
 
-            nextGraphNodeId = graphNode.next
+            if (node.name === 'if') {
+                // IF Node has two potential next and the ret stored current statement evaluated result
+                if (node.ret) {
+                    nextGraphNodeId = graphNode.positiveNext
+                } else {
+                    nextGraphNodeId = graphNode.negativeNext
+                }
+            } else {
+                nextGraphNodeId = graphNode.next
+            }
+
             graphNode = this._graph.getNodeById(graphNode.next)
         }
 

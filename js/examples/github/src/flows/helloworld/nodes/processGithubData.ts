@@ -4,7 +4,7 @@ import { debug } from 'debug'
 
 const log = debug('mylib:randomid')
 
-export class Node3 extends FunctionNode {
+export class ProcessGithubData extends FunctionNode {
 
     async run(): Promise<any> {
         const users = []

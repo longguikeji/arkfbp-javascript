@@ -2,10 +2,11 @@
 import { Flow } from './../../../../../ark/src/flow'
 import { Graph } from './../../../../../ark/src/graph'
 
-import { Node1 } from './nodes/node1'
-import { Node2 } from './nodes/node2'
-import { Node3 } from './nodes/node3'
-import { Node4 } from './nodes/node4'
+import { InvokeGithub } from './nodes/invokeGithub'
+import { SayHi } from './nodes/sayHi'
+import { SendDingDingMessage } from './nodes/dingding'
+import { ProcessGithubData } from './nodes/processGithubData'
+
 
 export class Main extends Flow {
 
@@ -13,22 +14,22 @@ export class Main extends Flow {
         const g = new Graph()
         g.nodes = [
             {
-                'cls': Node1,
+                'cls': SayHi,
                 'id': 1,
                 'next': 2,
             },
             {
-                'cls': Node2,
+                'cls': InvokeGithub,
                 'id': 2,
                 'next': 3,
             },
             {
-                'cls': Node3,
+                'cls': ProcessGithubData,
                 'id': 3,
                 'next': 4,
             },
             {
-                'cls': Node4,
+                'cls': SendDingDingMessage,
                 'id': 4,
             },
         ]
