@@ -1,9 +1,14 @@
 import express from 'express'
+import { runWorkflow } from './../../../ark/src/flow'
+
+const flowDirectory = __dirname + '/flows'
 
 export default function(app: express.Application) {
 
-    app.get('/', (req: express.Request, res: express.Response) => {
-        res.send('hello world')
+    app.get('/star', async (req: express.Request, res: express.Response) => {
+        const flowFilename = flowDirectory + '/helloworld'
+        const data = await runWorkflow(flowFilename)
+        res.send(data)
     })
 
 }

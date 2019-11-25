@@ -33,3 +33,10 @@ export class Flow {
         return lastOutputs
     }
 }
+
+export async function runWorkflow(flowFile: string) {
+    const ns = await import(flowFile)
+    const flow = new ns.Main()
+    const ret = await flow.main()
+    return ret
+}

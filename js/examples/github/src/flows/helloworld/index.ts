@@ -27,10 +27,10 @@ export class Main extends Flow {
                 'id': 3,
                 'next': 4,
             },
-            // {
-            //     'cls': Node4,
-            //     'id': 4,
-            // },
+            {
+                'cls': Node4,
+                'id': 4,
+            },
         ]
 
         return g
