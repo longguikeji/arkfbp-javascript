@@ -4,15 +4,34 @@ export class LoopNode extends Node {
 
     name = 'loop'
 
-    initStatement() {
-
+    async initStatement() {
+        return
     }
 
-    conditionStatement() {
-
+    async conditionStatement() {
+        return false
     }
 
-    postStatement() {
+    async postStatement() {
+        return
+    }
+
+    async process() {
+        return
+    }
+
+    async run() {
+        await this.initStatement()
+
+        while (await this.conditionStatement()) {
+            await this.process()
+            await this.postStatement()
+        }
+        /**
+         * for (let i = 0; i < 10; ++i )}
+         *      process(i)
+         * }
+         */
 
     }
 
