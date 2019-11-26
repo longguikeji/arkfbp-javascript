@@ -22,5 +22,6 @@ export class IFNode extends Node {
         }
 
         return this.negativeStatement()
+
     }
 }
