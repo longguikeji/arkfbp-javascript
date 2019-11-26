@@ -9,8 +9,8 @@ export class State {
         this._nodes = new Map()
     }
 
-    commit(cb: (state: any) => any) {
-        this._userData = cb(this._userData)
+    async commit(cb: (state: any) => any) {
+        this._userData = await cb(this._userData)
     }
 
     fetch() {

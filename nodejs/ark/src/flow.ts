@@ -17,7 +17,7 @@ export class Flow {
     async main(inputs?: any | null) {
         let lastOutputs = null
 
-        if (inputs === null) {
+        if (inputs !== null) {
             lastOutputs = inputs
         }
 
@@ -45,16 +45,16 @@ export class Flow {
                 nextGraphNodeId = graphNode.next
             }
 
-            graphNode = this._graph.getNodeById(graphNode.next)
+            graphNode = this._graph.getNodeById(nextGraphNodeId)
         }
 
         return lastOutputs
     }
 }
 
-export async function runWorkflow(flowFile: string) {
+export async function runWorkflow(flowFile: string, inputs?: any) {
     const ns = await import(flowFile)
     const flow = new ns.Main()
-    const ret = await flow.main()
+    const ret = await flow.main(inputs)
     return ret
 }

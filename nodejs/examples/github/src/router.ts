@@ -17,4 +17,10 @@ export default function(app: express.Application) {
         res.send(data)
     })
 
+    app.post('/register', async (req: express.Request, res: express.Response) => {
+        const flowFilename = flowDirectory + '/state'
+        const data = await runWorkflow(flowFilename, req.body)
+        res.send(data)
+    })
+
 }
