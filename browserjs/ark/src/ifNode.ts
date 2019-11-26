@@ -16,6 +16,7 @@ export class IFNode extends Node {
 
     async run() {
         const ret = !!this.expression()
+        this.ret = ret
 
         if (ret) {
             return this.positiveStatement()
