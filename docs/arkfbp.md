@@ -121,11 +121,13 @@ params: {
 
 ### Loop
 
-```init_statement``` 循环的初始条件
+```init_statement``` : 循环的初始条件
 
-```condition_statement``` 每次迭代前执行
+```condition_statement```: 每次迭代前执行
 
-```post_satement``` 每次迭代后执行
+```post_satement```: 每次迭代后执行
+
+```process```: Loop的函数体
 
 
 ## Graph
@@ -149,6 +151,9 @@ Graph描述了整个流的依赖关系，执行顺序
  	'next': 4,
 }
 ```
+
+id 既可以再Graph结构体中配置,也可以在节点的定义本身中直接指定
+
 
 Graph中节点的id不倾向于自己编写，arkfbp对应的语言实现会提供自动化配置的方案。
 

@@ -1,8 +1,11 @@
+import { GraphNode } from './graphNode'
+import { NodeIDType } from './node'
+
 export class Graph {
 
-    nodes: any[] = []
+    nodes: GraphNode[] = []
 
-    getNodeById(id: string): any | null {
+    getNodeById(id: NodeIDType): GraphNode | null {
         for (const node of this.nodes) {
             if (node.id === id) {
                 return node

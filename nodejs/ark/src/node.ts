@@ -1,7 +1,6 @@
-
 export class Node {
 
-    id: string = ''
+    id: NodeIDType = ''
     name: string = ''
 
     private _outputs: any | null = null
@@ -58,3 +57,6 @@ export class Node {
         this._errorNext = v
     }
 }
+
+export type NodeIDType = string | number
+export type NodeType = typeof Node

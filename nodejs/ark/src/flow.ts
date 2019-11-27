@@ -1,8 +1,12 @@
+import { Graph } from './graph'
+import { GraphNode } from './graphNode'
+import { IFNode } from './ifNode'
+import { NodeIDType } from './node'
 import { State } from './state'
 
 export class Flow {
 
-    private _graph: any
+    private _graph: Graph
     private _state: any
 
     constructor() {
@@ -10,8 +14,8 @@ export class Flow {
         this._state = new State()
     }
 
-    createGraph(): any {
-        return null
+    createGraph(): Graph {
+        return new Graph()
     }
 
     async main(inputs?: any | null) {
@@ -21,11 +25,18 @@ export class Flow {
             lastOutputs = inputs
         }
 
-        let graphNode = this._graph.nodes[0]
-        let nextGraphNodeId
+        let graphNode: GraphNode | null = this._graph.nodes[0]
+        let nextGraphNodeId: NodeIDType | undefined
         while(graphNode !== null) {
-            const node = new graphNode.cls()
-            node.id = graphNode.id.toString()
+            const node = new graphNode.cls!()
+            if (typeof graphNode.id !== 'undefined') {
+                node.id = graphNode.id.toString()
+            }
+
+            if (typeof node.id === 'undefined') {
+                throw new Error(`node must has the id property settled`)
+            }
+
             node.inputs = lastOutputs
             node.state = this._state
             const outputs = await node.run()
@@ -34,7 +45,7 @@ export class Flow {
             lastOutputs = outputs
             this._state.push(node)
 
-            if (node.name === 'if') {
+            if (node instanceof IFNode) {
                 // IF Node has two potential next and the ret stored current statement evaluated result
                 if (node.ret) {
                     nextGraphNodeId = graphNode.positiveNext
@@ -45,14 +56,19 @@ export class Flow {
                 nextGraphNodeId = graphNode.next
             }
 
-            graphNode = this._graph.getNodeById(nextGraphNodeId)
+            if(nextGraphNodeId){
+                graphNode = this._graph.getNodeById(nextGraphNodeId)
+            } else {
+                graphNode = null
+            }
+
         }
 
         return lastOutputs
     }
 }
 
-export async function runWorkflow(flowFile: string, inputs?: any) {
+export async function runWorkflow(flowFile: string, inputs?: any | null) {
     const ns = await import(flowFile)
     const flow = new ns.Main()
     const ret = await flow.main(inputs)
