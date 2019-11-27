@@ -58,7 +58,7 @@ class ORM {
 }
 
 
-class QueryData extends FunctionNode {
+export class QueryData extends FunctionNode {
 
     db: string = ''
     sql = ''
@@ -73,7 +73,7 @@ class QueryData extends FunctionNode {
     }
 }
 
-class QueryAllData extends FunctionNode {
+export class QueryAllData extends FunctionNode {
 
     db: string = ''
     sql = ''
@@ -88,7 +88,7 @@ class QueryAllData extends FunctionNode {
     }
 }
 
-class InsertData extends FunctionNode {
+export class InsertData extends FunctionNode {
 
     db: string = ''
     sql = ''
@@ -103,7 +103,7 @@ class InsertData extends FunctionNode {
     }
 }
 
-class DeleteData extends FunctionNode {
+export class DeleteData extends FunctionNode {
 
     db: string = ''
     sql = ''
@@ -119,7 +119,7 @@ class DeleteData extends FunctionNode {
 }
 
 
-class UpdateData extends FunctionNode {
+export class UpdateData extends FunctionNode {
 
     db: string = ''
     sql = ''
