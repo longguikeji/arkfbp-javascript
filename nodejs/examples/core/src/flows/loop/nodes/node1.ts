@@ -1,5 +1,5 @@
 import { LoopNode } from './../../../../../../ark/src/loopNode'
-
+import { State } from './../../../../../../ark/src/state'
 
 export class Node1 extends LoopNode {
 
@@ -8,7 +8,7 @@ export class Node1 extends LoopNode {
     async initStatement() {
         this._i = 0
         this.state.commit((state: any) => {
-            state.values = []
+            state.values! = []
             return state
         })
     }

@@ -10,7 +10,8 @@ export class State {
     }
 
     async commit(cb: (state: any) => any) {
-        this._userData = await cb(this._userData)
+        // @Todo: refactor this
+        await cb(this._userData)
     }
 
     fetch() {
@@ -18,24 +19,27 @@ export class State {
     }
 
     getOutputs(id: string) {
-        console.info('getOutputs')
         if (this._nodes.has(id)) {
-            const node = this._nodes.get(id)[0]
+            const nodes = this._nodes.get(id)
+            const node = nodes[nodes.length-1]
             return node.outputs
         }
-        console.info('xxx')
     }
 
     getInputs(id: string) {
         if (this._nodes.has(id)) {
-            const node = this._nodes.get(id)[0]
+            const nodes = this._nodes.get(id)
+            const node = nodes[nodes.length-1]
             return node.inputs
         }
     }
 
     push(node: Node) {
-        // @Todo: support multiple executions
-        this._nodes.set(node.id, [node])
+        if (!this._nodes.has(node.id)) {
+            this._nodes.set(node.id, [node])
+        } else {
+            this._nodes.get(node.id).push(node)
+        }
     }
 
 }
