@@ -18,7 +18,7 @@ Confidential
 ## 术语
 
 1. Node(节点)
-	程序的最小执行单元为节点(Node) 
+	程序的最小执行单元为节点(Node)
 2. 工作流
 3. 工作流实例
 4. Network
@@ -159,16 +159,8 @@ Graph中节点的id不倾向于自己编写，arkfbp对应的语言实现会提�
 
 ## 生命周期&Hook
 
-### 节点生命周期钩子
+### [节点生命周期钩子](./flowhooks.md)
 
-1. before_create
-2. created
-3. before_initialized
-4. initialized
-5. before_execute
-6. executed
-7. before_destroy
-8. destroyed
 
 ### Flow生命周期钩子
 
@@ -279,7 +271,7 @@ class Node:
 import ark
 
 class MyNode(ark.AbstactNode):
-	
+
     def run(self):
         count = self.state['count']
 	print(count)
@@ -345,7 +337,7 @@ request: Request{
 
 ```—target: bare, docker, arkos, kubernetes```
 
- 
+
 ## 测试
 
 ### 节点单元测试
@@ -356,3 +348,6 @@ request: Request{
 ```
 
 在对应的节点实现文件中，如果存在`test_xxx.py`的文件，则会被认为是该节点的单元测试文件，arkfbp执行框架将会自动发现其中的单元测试，并在需要执行的时候执行。
+
+
+## 执行环境

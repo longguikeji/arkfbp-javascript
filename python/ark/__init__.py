@@ -15,13 +15,33 @@ def run_flow(flow, request):
         mod = getattr(mod, s)
 
     f = mod.Main()
+    if hasattr(f, 'created'):
+        f.created()
 
     # f.state.request = request
     # f.state.data_dir = ''
 
     inputs = request.get_json()
 
+    if hasattr(f, 'before_initialize'):
+        f.before_initialize()
+
+    f.init()
+
+    if hasattr(f, 'initialized'):
+        f.initialized()
+
+    if hasattr(f, 'before_execute'):
+        f.before_execute()
+
     ret = f.main(inputs=inputs)
+
+    if hasattr(f, 'executed'):
+        f.executed()
+
+    if hasattr(f, 'before_destroy'):
+        f.before_destroy()
+
     if ret is None:
         return ''
 

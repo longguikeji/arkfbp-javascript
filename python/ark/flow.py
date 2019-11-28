@@ -17,6 +17,9 @@ class Flow:
 
         # 根据 Nodes & Edges 设置 next
 
+    def init(self):
+        pass
+
     def create_graph(self):
         raise NotImplementedError
 

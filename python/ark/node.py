@@ -162,17 +162,21 @@ class LoopNode(Node):
     condition = None
     post = None
 
-    def init(self):
+    def init_statement(self):
         pass
 
-    def condition(self):
+    def condition_statement(self):
         return False
 
-    def post(self):
+    def post_statement(self):
+        pass
+
+    def process(self):
         pass
 
     def run(self, *args, **kwargs):
         self.init()
 
         while bool(self.condition()):
+            self.process()
             self.post()

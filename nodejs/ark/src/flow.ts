@@ -18,6 +18,10 @@ export class Flow {
         return new Graph()
     }
 
+    init() {
+
+    }
+
     async main(inputs?: any | null) {
         let lastOutputs = null
 
@@ -71,6 +75,26 @@ export class Flow {
 export async function runWorkflow(flowFile: string, inputs?: any | null) {
     const ns = await import(flowFile)
     const flow = new ns.Main()
+
+    if (flow.hasOwnProperty('beforeInitialize')) {
+        flow.beforeInitialize()
+    }
+    flow.init()
+    if (flow.hasOwnProperty('initialized')) {
+        flow.initialized()
+    }
+
+    if (flow.hasOwnProperty('beforeExecute')) {
+        flow.beforeExecute()
+    }
     const ret = await flow.main(inputs)
+    if (flow.hasOwnProperty('executed')) {
+        flow.executed()
+    }
+
+    if (flow.hasOwnProperty('beforeDestroy')) {
+        flow.beforeDestroy()
+    }
+
     return ret
 }

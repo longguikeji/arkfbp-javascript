@@ -23,6 +23,7 @@ export class SendDingDingMessage extends APINode {
             },
         }
         log(this.params)
+
         return super.run()
     }
 
