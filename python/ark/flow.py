@@ -1,5 +1,6 @@
 from .stack import Stack
 from .state import State
+from .node import IFNode
 
 class Flow:
 
@@ -31,6 +32,12 @@ class Flow:
         graph_node = self.graph.nodes[0]
         while graph_node is not None:
             node = graph_node['cls']()
+            if graph_node.get('id', None):
+                node.id = graph_node['id']
+
+            if not node.id:
+                raise Exception('node id must be settled')
+
             node.state = self.state
             node.inputs = last_outputs
 
@@ -45,7 +52,8 @@ class Flow:
             print(node.next, node.name)
             last_outputs = outputs
 
-            if node.name == 'if': # IF Node has two potential next
+            if isinstance(node, IFNode):
+                # IF Node has two potential next
                 if node.ret:
                     next_graph_node_id = graph_node.get('positive_next', None)
                 else:

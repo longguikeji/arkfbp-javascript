@@ -5,6 +5,7 @@ import copy
 
 class Node:
 
+    id = ''
     name = ''
 
     def __init__(self, *args, **kwargs):

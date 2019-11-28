@@ -15,4 +15,3 @@ class Graph:
                 return node
 
         raise Exception('node id not found {}'.format(id))
-
