@@ -15,6 +15,8 @@ export class Node {
         this._state = null
     }
 
+    init(): void {}
+
     get outputs() {
         return this._outputs
     }
@@ -56,6 +58,13 @@ export class Node {
     set errorNext(v: any) {
         this._errorNext = v
     }
+
+    created(): void {}
+    beforeInitialize(): void {}
+    initialized(): void {}
+    beforeExecute(): void {}
+    executed(): void {}
+    beforeDestroy(): void {}
 }
 
 export type NodeIDType = string | number
