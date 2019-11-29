@@ -35,6 +35,15 @@ class Flow:
         graph_node = self.graph.nodes[0]
         while graph_node is not None:
             node = graph_node['cls']()
+
+            if hasattr(node, 'created'):
+                node.created()
+
+            if hasattr(node, 'before_initialize'):
+                node.before_initialize()
+
+            node.init()
+
             if graph_node.get('id', None):
                 node.id = graph_node['id']
 
@@ -44,7 +53,17 @@ class Flow:
             node.state = self.state
             node.inputs = last_outputs
 
+            if hasattr(node, 'initialized'):
+                node.initialized()
+
+            if hasattr(node, 'before_execute'):
+                node.before_execute()
+
             outputs = node.run()
+
+            if hasattr(node, 'execute'):
+                node.execute()
+
             node.outputs = outputs
             self._stack.push(node)
             print('node {} {} executed, with outputs: {}'.format(

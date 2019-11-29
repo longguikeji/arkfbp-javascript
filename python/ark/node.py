@@ -13,6 +13,9 @@ class Node:
         self._inputs = None
         self._outputs = None
 
+    def init():
+        pass
+
     def commit_state(self, cb):
         '''
         commit state
@@ -54,6 +57,24 @@ class Node:
         pass
 
     def on_error(self):
+        pass
+
+    def created(self):
+        pass
+
+    def before_initialized(self):
+        pass
+
+    def initialized(self):
+        pass
+
+    def before_execute(self):
+        pass
+
+    def executed(self):
+        pass
+
+    def before_destroy(self):
         pass
 
 
