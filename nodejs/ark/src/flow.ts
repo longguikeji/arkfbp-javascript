@@ -9,6 +9,13 @@ import { Response } from './response'
 
 import express from 'express'
 
+
+export class FlowOptions {
+
+    request?: any;
+
+}
+
 export class Flow {
 
     private _graph: Graph
@@ -33,12 +40,15 @@ export class Flow {
         this._response = v
     }
 
-    constructor(req?: any) {
+    constructor(options: FlowOptions = {}) {
         this._graph = this.createGraph()
         this._state = new State()
 
         this._request = new Request()
-        this._request.parse(req)
+
+        if (options.request) {
+            this._request.parse(options.request)
+        }
 
         this._response = new Response()
     }
@@ -59,7 +69,7 @@ export class Flow {
 
         let graphNode: GraphNode | null = this._graph.nodes[0]
         let nextGraphNodeId: NodeIDType | undefined
-        while(graphNode !== null) {
+        while (graphNode !== null) {
             const node = new graphNode.cls!()
 
             node.$request = this.request
@@ -124,7 +134,7 @@ export class Flow {
                 nextGraphNodeId = graphNode.next
             }
 
-            if(nextGraphNodeId){
+            if (nextGraphNodeId) {
                 graphNode = this._graph.getNodeById(nextGraphNodeId)
             } else {
                 graphNode = null
@@ -135,11 +145,11 @@ export class Flow {
         return lastOutputs
     }
 
-    beforeInitialize(){}
-    initialized(){}
-    beforeExecute(){}
-    executed(){}
-    beforeDestroy(){}
+    beforeInitialize() { }
+    initialized() { }
+    beforeExecute() { }
+    executed() { }
+    beforeDestroy() { }
 }
 
 export async function importWorkflowByFile(filename: string) {

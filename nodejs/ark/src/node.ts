@@ -10,8 +10,8 @@ export class Node {
     private _next: Node | null = null
     private _errorNext: Node | null = null
 
-    $request: any | null = null
-    $response: any | null = null
+    $request?: any
+    $response?: any
 
     constructor() {
         this._outputs = null
@@ -41,6 +41,14 @@ export class Node {
     }
 
     set state(v: any) {
+        this._state = v
+    }
+
+    get $state() {
+        return this._state
+    }
+
+    set $state(v: any) {
         this._state = v
     }
 

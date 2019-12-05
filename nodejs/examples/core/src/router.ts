@@ -4,8 +4,6 @@ import { runWorkflow } from './../../../ark/src/flow'
 import { Main as LoopFlow } from './flows/loop'
 import { Main as Loop2Flow } from './flows/loop2'
 
-// const flowDirectory = __dirname + '/flows'
-
 export default function (app: express.Application) {
 
     app.get('/_routes/', async (req: express.Request, res: express.Response) => {
@@ -41,15 +39,19 @@ export default function (app: express.Application) {
     })
 
     app.get('/loop', async (req: express.Request, res: express.Response) => {
-        // const flowFilename = flowDirectory + '/loop'
-        // const data = await runWorkflow(flowFilename)
-        const flow = new LoopFlow(req)
+        const flow = new LoopFlow({
+            request: req,
+        })
         const data = await runWorkflow(flow)
+
+        // @Todo: Merge builtin response with the express res to generate final response
         res.send(data)
     })
 
     app.get('/loop2', async (req: express.Request, res: express.Response) => {
-        const flow = new LoopFlow(req)
+        const flow = new LoopFlow({
+            request: req,
+        })
         const data = await runWorkflow(flow)
         res.send(data)
     })
