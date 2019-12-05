@@ -62,6 +62,9 @@ export class Flow {
         while(graphNode !== null) {
             const node = new graphNode.cls!()
 
+            node.$request = this.request
+            node.$response = this.response
+
             if (node.hasOwnProperty('created')) {
                 node.created()
             }

@@ -10,6 +10,9 @@ export class Node {
     private _next: Node | null = null
     private _errorNext: Node | null = null
 
+    $request: any | null = null
+    $response: any | null = null
+
     constructor() {
         this._outputs = null
         this._state = null
