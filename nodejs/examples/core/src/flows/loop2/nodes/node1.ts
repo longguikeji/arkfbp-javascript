@@ -1,16 +1,12 @@
 import { LoopNode } from './../../../../../../ark/src/loopNode'
 import { State } from './../../../../../../ark/src/state'
-import { ark } from './../../../../../../ark/src/index'
 
-
-export class Node1 extends LoopNode {
+export class MyLoopNode extends LoopNode {
 
     private _i: number = 0
 
-    private _sum: number = 0
-
     async initStatement() {
-        this._i = 1
+        this._i = 0
         this.state.commit((state: any) => {
             state.values! = []
             return state
@@ -26,9 +22,8 @@ export class Node1 extends LoopNode {
     }
 
     async process() {
-        this._sum += this._i
         this.state.commit((state: any) => {
-            state.sum = this._sum
+            state.values.push(this._i)
             return state
         })
     }

@@ -1,17 +1,46 @@
 import { Graph } from './graph'
 import { GraphNode } from './graphNode'
 import { IFNode } from './ifNode'
-import { NodeIDType } from './node'
+import { NodeIDType, NodeType } from './node'
 import { State } from './state'
+import { LoopNode } from './loopNode'
+import { Request } from './request'
+import { Response } from './response'
+
+import express from 'express'
 
 export class Flow {
 
     private _graph: Graph
     private _state: any
 
-    constructor() {
+    private _request: Request | null = null
+    private _response: Response | null = null
+
+    get request(): Request | null {
+        return this._request
+    }
+
+    set request(v: Request | null) {
+        this._request = v
+    }
+
+    get response(): Response | null {
+        return this._response
+    }
+
+    set response(v: Response | null) {
+        this._response = v
+    }
+
+    constructor(req?: any) {
         this._graph = this.createGraph()
         this._state = new State()
+
+        this._request = new Request()
+        this._request.parse(req)
+
+        this._response = new Response()
     }
 
     createGraph(): Graph {
@@ -62,6 +91,10 @@ export class Flow {
                 node.beforeExecute()
             }
 
+            if (node instanceof LoopNode) {
+                // @Todo: how to execute of the loop body?
+            }
+
             const outputs = await node.run()
 
             if (node.hasOwnProperty('executed')) {
@@ -98,16 +131,33 @@ export class Flow {
 
         return lastOutputs
     }
+
+    beforeInitialize(){}
+    initialized(){}
+    beforeExecute(){}
+    executed(){}
+    beforeDestroy(){}
 }
 
-export async function runWorkflow(flowFile: string, inputs?: any | null) {
-    const ns = await import(flowFile)
+export async function importWorkflowByFile(filename: string) {
+    const ns = await import(filename)
+    return ns
+}
+
+export async function runWorkflowByFile(filename: string, inputs?: any) {
+    const ns = await import(filename)
     const flow = new ns.Main()
 
+    return runWorkflow(flow, inputs)
+}
+
+export async function runWorkflow(flow: Flow, inputs?: any) {
     if (flow.hasOwnProperty('beforeInitialize')) {
         flow.beforeInitialize()
     }
+
     flow.init()
+
     if (flow.hasOwnProperty('initialized')) {
         flow.initialized()
     }

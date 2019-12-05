@@ -29,12 +29,12 @@ export class APINode extends Node {
 
     async _request_direct() {
         if (this.method === 'GET') {
-            const resp = await axios.get(this.url)
+            const resp = await axios.get(this.url, {headers: this.headers})
             return resp.data
         }
 
         else if (this.method === 'POST') {
-            const resp = await axios.post(this.url, this.params)
+            const resp = await axios.post(this.url, this.params, {headers: this.headers})
             return resp.data
         }
     }

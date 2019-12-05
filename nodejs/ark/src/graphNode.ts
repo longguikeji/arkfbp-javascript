@@ -8,6 +8,8 @@ export class GraphNode {
     positiveNext?: NodeIDType
     negativeNext?: NodeIDType
 
+    body?: any[]
+
     constructor(id?: string, cls?: NodeType, next?: string, positiveNext?: string, negativeNext?: string) {
       this.id = id
       this.cls = cls
