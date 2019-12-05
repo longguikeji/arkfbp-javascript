@@ -6,20 +6,27 @@ import { State } from './state'
 import { LoopNode } from './loopNode'
 import { Request } from './request'
 import { Response } from './response'
+import { AppState } from './appState'
 
 import express from 'express'
 
 
 export class FlowOptions {
 
+    /**
+     * request object from expressjs
+     */
     request?: any;
 
+    appState?: AppState;
 }
 
 export class Flow {
 
     private _graph: Graph
+
     private _state: any
+    private _appState: any
 
     private _request: Request | null = null
     private _response: Response | null = null
@@ -50,6 +57,10 @@ export class Flow {
             this._request.parse(options.request)
         }
 
+        if (options.appState) {
+            this._appState = options.appState
+        }
+
         this._response = new Response()
     }
 
@@ -57,8 +68,7 @@ export class Flow {
         return new Graph()
     }
 
-    init() {
-    }
+    init() {}
 
     async main(inputs?: any | null) {
         let lastOutputs = null
@@ -98,7 +108,8 @@ export class Flow {
             }
 
             node.inputs = lastOutputs
-            node.state = this._state
+            node.$state = this._state
+            node.$appState = this._appState
 
             if (node.hasOwnProperty('beforeExecute')) {
                 node.beforeExecute()
@@ -157,10 +168,9 @@ export async function importWorkflowByFile(filename: string) {
     return ns
 }
 
-export async function runWorkflowByFile(filename: string, inputs?: any) {
+export async function runWorkflowByFile(filename: string, inputs?: any, options?: FlowOptions) {
     const ns = await import(filename)
-    const flow = new ns.Main()
-
+    const flow = new ns.Main(options)
     return runWorkflow(flow, inputs)
 }
 

@@ -5,7 +5,16 @@ export class Node {
 
     private _outputs: any | null = null
     private _inputs: any | null = null
+
+    /**
+     * Flow level state sharing
+     */
     private _state: any | null = null
+
+    /**
+     * App level state sharing
+     */
+    private _appState: any | null = null
 
     private _next: Node | null = null
     private _errorNext: Node | null = null
@@ -50,6 +59,14 @@ export class Node {
 
     set $state(v: any) {
         this._state = v
+    }
+
+    get $appState() {
+        return this._appState
+    }
+
+    set $appState(v: any) {
+        this._appState = v
     }
 
     async run(): Promise<any> {}

@@ -3,8 +3,9 @@ import { runWorkflow } from './../../../ark/src/flow'
 
 import { Main as LoopFlow } from './flows/loop'
 import { Main as Loop2Flow } from './flows/loop2'
+import { AppState } from '../../../ark/src/appState'
 
-export default function (app: express.Application) {
+export default function (app: express.Application, appState: AppState) {
 
     app.get('/_routes/', async (req: express.Request, res: express.Response) => {
         let s = ''
@@ -41,6 +42,7 @@ export default function (app: express.Application) {
     app.get('/loop', async (req: express.Request, res: express.Response) => {
         const flow = new LoopFlow({
             request: req,
+            appState: appState,
         })
         const data = await runWorkflow(flow)
 
@@ -51,6 +53,7 @@ export default function (app: express.Application) {
     app.get('/loop2', async (req: express.Request, res: express.Response) => {
         const flow = new LoopFlow({
             request: req,
+            appState: appState,
         })
         const data = await runWorkflow(flow)
         res.send(data)
