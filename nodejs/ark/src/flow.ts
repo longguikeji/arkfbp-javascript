@@ -86,17 +86,17 @@ export class Flow {
             node.$response = this.response
 
             if (node.hasOwnProperty('created')) {
-                node.created()
+                await node.created()
             }
 
             if (node.hasOwnProperty('beforeInitialize')) {
-                node.beforeInitialize()
+                await node.beforeInitialize()
             }
 
             node.init()
 
             if (node.hasOwnProperty('initialized')) {
-                node.initialized()
+                await node.initialized()
             }
 
             if (typeof graphNode.id !== 'undefined') {
@@ -112,7 +112,7 @@ export class Flow {
             node.$appState = this._appState
 
             if (node.hasOwnProperty('beforeExecute')) {
-                node.beforeExecute()
+                await node.beforeExecute()
             }
 
             if (node instanceof LoopNode) {
@@ -122,13 +122,13 @@ export class Flow {
             const outputs = await node.run()
 
             if (node.hasOwnProperty('executed')) {
-                node.executed()
+                await node.executed()
             }
 
             node.outputs = outputs
 
             if (node.hasOwnProperty('beforeDestroy')) {
-                node.beforeDestroy()
+                await node.beforeDestroy()
             }
 
             lastOutputs = outputs

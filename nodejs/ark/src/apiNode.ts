@@ -14,7 +14,7 @@ export class APINode extends Node {
     params: any | null = null
 
     /**
-     *
+     * API Node执行结果，方便重载的时候获取更多除了data的额外信息
      */
     resp: {
         status: number,
