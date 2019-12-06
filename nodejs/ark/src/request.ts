@@ -1,5 +1,6 @@
 
 import express from 'express'
+import _ from 'lodash'
 
 /**
  * HTTP Binding
@@ -23,7 +24,7 @@ export class Request {
     body: string = ''
 
     cookies: any = {}
-    files: any = []
+
 
     headers: any = {}
 
@@ -31,6 +32,16 @@ export class Request {
     encodings: string[] | null = null
     charsets: string[] | null = null
     languages: string[] | null = null
+
+    /**
+     * fields: form 表单提交的时候普通字段
+     */
+    fields: any = {}
+
+    /**
+     *
+     */
+    files: any = []
 
     constructor() {}
 
@@ -59,6 +70,18 @@ export class Request {
         for (const key in req.cookies) {
             this.cookies[key] = req.cookies[key]
         }
-    }
 
+        this.fields = _.cloneDeep(req.fields)
+
+        for (const name in req.files) {
+            if (req.files.hasOwnProperty(name)) {
+                this.files[name] = {
+                    path: req.files[name].path,
+                    name: req.files[name].name,
+                    size: req.files[name].size,
+                    type: req.files[name].type,
+                }
+            }
+        }
+    }
 }

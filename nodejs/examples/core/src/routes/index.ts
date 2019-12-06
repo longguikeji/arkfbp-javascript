@@ -15,6 +15,11 @@ export default {
         },
         {
             'loop2': 'loop2',
+        },
+        {
+            file: {
+                post: 'loop',
+            }
         }
     ],
 }
