@@ -5,7 +5,7 @@ import installRoutes from './router'
 import { AppState } from '../../../ark/src/appState'
 
 
-export function serve(port: number, appState: AppState) {
+export async function serve(port: number, appState: AppState) {
     const app: express.Application = express()
 
     app.use(cookieParser())
@@ -14,7 +14,9 @@ export function serve(port: number, appState: AppState) {
         extended: true,
     }))
 
-    installRoutes(app, appState)
+    await installRoutes(app, appState).catch((error)=> {
+        console.info(error)
+    })
 
     app.listen(port, () => {
         console.info(`server started at :${port}`)

@@ -26,7 +26,6 @@ export class Node1 extends LoopNode {
     }
 
     async process() {
-        console.info(this.$appState.fetch())
         this._sum += this._i
         this.state.commit((state: any) => {
             state.sum = this._sum

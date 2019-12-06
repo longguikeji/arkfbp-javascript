@@ -32,6 +32,14 @@ async function start() {
 
         await runWorkflow(startupFlow)
     }
+
+    /**
+     * 注册App级别的Hook
+     */
+
+     /**
+      * 注册中间件
+      */
 }
 
 start().then(() => {
@@ -65,4 +73,3 @@ start().then(() => {
 }).catch((error) => {
     console.info(error)
 })
-
