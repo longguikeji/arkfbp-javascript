@@ -1,31 +1,31 @@
 import fs from 'fs'
+
 import express from 'express'
-import { runWorkflow, importWorkflowByFile } from './../../../ark/src/flow'
 
-import { Main as LoopFlow } from './flows/loop'
-import { Main as Loop2Flow } from './flows/loop2'
 import { AppState } from '../../../ark/src/appState'
-
+import { importWorkflowByFile, runWorkflow } from './../../../ark/src/flow'
 
 function r(app: express.Application, appState: AppState, path: string, method: string, flowName: string) {
-    let cb: any = async (req: express.Request, res: express.Response) => {
+    const cb = async (req: express.Request, res: express.Response) => {
         const flowFilename = __dirname + '/flows' + '/' + flowName
         const ns = await importWorkflowByFile(flowFilename)
         const flow = new ns.Main({
             request: req,
-            appState: appState,
+            appState,
         })
         const data = await runWorkflow(flow)
         res.send(data)
     }
 
-    switch(method) {
+    switch (method) {
         case 'get':
             app.get(path, cb)
             break
         case 'post':
             app.post(path, cb)
             break
+        default:
+            return
     }
 }
 
@@ -41,7 +41,9 @@ export default async function (app: express.Application, appState: AppState) {
         function getMethods(r: any) {
             const methods = []
             for (const method in r.methods) {
-                methods.push(method.toUpperCase())
+                if (r.methods.hasOwnProperty(method)) {
+                    methods.push(method.toUpperCase())
+                }
             }
 
             return methods
@@ -51,7 +53,7 @@ export default async function (app: express.Application, appState: AppState) {
             if (r.route && r.route.path) {
                 s += `${idx + 1} `
 
-                for (let method of getMethods(r.route)) {
+                for (const method of getMethods(r.route)) {
                     s += `[${method}]`
                 }
 
@@ -65,9 +67,7 @@ export default async function (app: express.Application, appState: AppState) {
     })
 
     const routeFiles = fs.readdirSync(__dirname + '/routes')
-
-    for (let i = 0; i < routeFiles.length; ++i) {
-        const filename = routeFiles[i]
+    for (const filename of routeFiles) {
         if (filename.indexOf('.map') >= 0) {
             continue
         }
@@ -80,32 +80,13 @@ export default async function (app: express.Application, appState: AppState) {
                     r(app, appState, namespace + '/' + key, 'get', route[key])
                 } else if (typeof route[key] === 'object') {
                     for (const method in route[key]) {
-                        const flowName = route[key][method]
-                        r(app, appState, namespace + '/' + key, method, flowName)
+                        if (route[key].hasOwnProperty(method)) {
+                            const flowName = route[key][method]
+                            r(app, appState, namespace + '/' + key, method, flowName)
+                        }
                     }
                 }
             }
         })
     }
-
-    // app.get('/loop', async (req: express.Request, res: express.Response) => {
-    //     const flow = new LoopFlow({
-    //         request: req,
-    //         appState: appState,
-    //     })
-    //     const data = await runWorkflow(flow)
-
-    //     // @Todo: Merge builtin response with the express res to generate final response
-    //     res.send(data)
-    // })
-
-    // app.get('/loop2', async (req: express.Request, res: express.Response) => {
-    //     const flow = new LoopFlow({
-    //         request: req,
-    //         appState: appState,
-    //     })
-    //     const data = await runWorkflow(flow)
-    //     res.send(data)
-    // })
-
 }

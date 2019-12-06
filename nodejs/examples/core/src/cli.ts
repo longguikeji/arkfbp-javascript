@@ -1,12 +1,13 @@
-import { Argv } from "yargs"
-import { runWorkflowByFile, runWorkflow, importWorkflowByFile } from './../../../ark/src/flow'
-import { serve } from './server'
+import fs from 'fs'
+
+import { Argv } from 'yargs'
 
 import { ark } from './../../../ark/src'
 import { AppState } from './../../../ark/src/appState'
-import Logger from './plugins/log'
+import { importWorkflowByFile, runWorkflow, runWorkflowByFile } from './../../../ark/src/flow'
 
-import * as fs from 'fs'
+import Logger from './plugins/log'
+import { serve } from './server'
 
 ark.registerPlugin(Logger)
 
@@ -27,7 +28,7 @@ async function start() {
     if (fs.existsSync(flowFilename)) {
         const ns = await importWorkflowByFile(flowFilename)
         const startupFlow = new ns.Main({
-            appState: appState,
+            appState,
         })
 
         await runWorkflow(startupFlow)

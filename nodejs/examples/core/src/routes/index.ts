@@ -1,6 +1,6 @@
 export default {
-    "namespace": "",
-    "routes": [
+    'namespace': '',
+    'routes': [
         // {
         //     "login": {
         //         "get": "login",
@@ -11,10 +11,10 @@ export default {
         //     "logout": "logout",
         // }
         {
-            "loop": "loop",
+            'loop': 'loop',
         },
         {
-            "loop2": "loop2",
+            'loop2': 'loop2',
         }
-    ]
+    ],
 }
