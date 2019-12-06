@@ -3,17 +3,24 @@ import fs from 'fs'
 import express from 'express'
 
 import { AppState } from '../../../ark/src/appState'
+import { executeHook } from '../../../ark/src/hook'
 import { importWorkflowByFile, runWorkflow } from './../../../ark/src/flow'
 
 function r(app: express.Application, appState: AppState, path: string, method: string, flowName: string) {
     const cb = async (req: express.Request, res: express.Response) => {
+        await executeHook(appState, __dirname + '/flows/hooks/flow/beforeCreate')
+
         const flowFilename = __dirname + '/flows' + '/' + flowName
         const ns = await importWorkflowByFile(flowFilename)
         const flow = new ns.Main({
             request: req,
             appState,
         })
+
+        await executeHook(appState, __dirname + '/flows/hooks/flow/created')
         const data = await runWorkflow(flow)
+        await executeHook(appState, __dirname + '/flows/hooks/flow/executed')
+
         res.send(data)
     }
 

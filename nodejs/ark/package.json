@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.2",
-    "@types/node": "^10.0.3",
+    "@types/node": "^10.17.6",
     "gts": "^1.1.2",
     "typescript": "~3.7.0"
   },

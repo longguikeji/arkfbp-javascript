@@ -1,5 +1,5 @@
-import { Flow } from './../../../../../../ark/src/flow'
-import { Graph } from './../../../../../../ark/src/graph'
+import { Flow } from '../../../../../../../ark/src/flow'
+import { Graph } from '../../../../../../../ark/src/graph'
 
 import { Node1 } from './nodes/node1'
 

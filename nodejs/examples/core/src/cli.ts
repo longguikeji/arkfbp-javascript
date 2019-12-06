@@ -4,6 +4,9 @@ import { Argv } from 'yargs'
 
 import { ark } from './../../../ark/src'
 import { AppState } from './../../../ark/src/appState'
+
+import { executeHook } from '../../../ark/src/hook'
+
 import { importWorkflowByFile, runWorkflow, runWorkflowByFile } from './../../../ark/src/flow'
 
 import Logger from './plugins/log'
@@ -18,29 +21,19 @@ function startServer(port: string, appState: AppState) {
 
 const appState = new AppState()
 
-// invoke startup flow of the project
+
 async function start() {
     /**
+     * 注册App级别的Hook
      * App的StartupFlow仅会在server启动的时候执行一次，你可以任意设置App的State
      * Server启动之后AppState会被引用
      */
-    const flowFilename = __dirname + '/flows/app/startup'
-    if (fs.existsSync(flowFilename)) {
-        const ns = await importWorkflowByFile(flowFilename)
-        const startupFlow = new ns.Main({
-            appState,
-        })
-
-        await runWorkflow(startupFlow)
-    }
+    await executeHook(appState, __dirname + '/flows/hooks/app/beforeStart')
+    await executeHook(appState, __dirname + '/flows/hooks/app/started')
 
     /**
-     * 注册App级别的Hook
+     * 注册中间件
      */
-
-     /**
-      * 注册中间件
-      */
 }
 
 start().then(() => {
