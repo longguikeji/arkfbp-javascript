@@ -1,10 +1,11 @@
 import fs from 'fs'
 
-import express from 'express'
+import express, { response } from 'express'
 
 import { AppState } from '../../../ark/src/appState'
 import { executeHook } from '../../../ark/src/hook'
 import { importWorkflowByFile, runWorkflow } from './../../../ark/src/flow'
+import { Response } from './../../../ark/src/response'
 
 
 function r(app: express.Application, appState: AppState, path: string, method: string, flowName: string) {
@@ -13,8 +14,10 @@ function r(app: express.Application, appState: AppState, path: string, method: s
 
         const flowFilename = __dirname + '/flows' + '/' + flowName
         const ns = await importWorkflowByFile(flowFilename)
+        const r = new Response()
         const flow = new ns.Main({
             request: req,
+            response: r,
             appState,
         })
 
@@ -22,7 +25,40 @@ function r(app: express.Application, appState: AppState, path: string, method: s
         const data = await runWorkflow(flow)
         await executeHook(appState, __dirname + '/flows/hooks/flow/executed')
 
-        res.send(data)
+        /**
+         * catefully merge the original response propertities in ark with
+         */
+
+        const flowResponse = flow.response
+        /**
+         * merge status code
+         */
+        res.status(flowResponse.status)
+
+        /**
+         * merge headers
+         */
+        for (const key in flowResponse.headers) {
+            if (flowResponse.headers.hasOwnProperty(key)) {
+                const values = flowResponse.headers[key]
+                if (Array.isArray(values)) {
+                    for (const value of values) {
+                        res.set(key, flowResponse.headers[key])
+                    }
+                } else {
+                    res.set(key, flowResponse.headers[key])
+                }
+            }
+        }
+
+        /**
+         * merge data
+         */
+        if (flowResponse.data) {
+            res.send(flowResponse.data)
+        } else {
+            res.send(data)
+        }
     }
 
     switch (method) {

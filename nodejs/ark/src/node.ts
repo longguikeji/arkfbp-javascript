@@ -1,33 +1,6 @@
+import { Request } from './request'
+import { Response } from './response'
 export class Node {
-
-    id: NodeIDType = ''
-    name: string = ''
-
-    private _outputs: any | null = null
-    private _inputs: any | null = null
-
-    /**
-     * Flow level state sharing
-     */
-    private _state: any | null = null
-
-    /**
-     * App level state sharing
-     */
-    private _appState: any | null = null
-
-    private _next: Node | null = null
-    private _errorNext: Node | null = null
-
-    $request?: any
-    $response?: any
-
-    constructor() {
-        this._outputs = null
-        this._state = null
-    }
-
-    init(): void { }
 
     get outputs() {
         return this._outputs
@@ -69,8 +42,6 @@ export class Node {
         this._appState = v
     }
 
-    async run(): Promise<any> { }
-
     get next() {
         return this._next
     }
@@ -87,12 +58,43 @@ export class Node {
         this._errorNext = v
     }
 
-    created(): void { }
-    beforeInitialize(): void { }
-    initialized(): void { }
-    beforeExecute(): void { }
-    executed(): void { }
-    beforeDestroy(): void { }
+    id: NodeIDType = ''
+    name: string = ''
+
+    $request?: Request
+    $response?: Response
+
+    private _outputs: any | null = null
+    private _inputs: any | null = null
+
+    /**
+     * Flow level state sharing
+     */
+    private _state: any | null = null
+
+    /**
+     * App level state sharing
+     */
+    private _appState: any | null = null
+
+    private _next: Node | null = null
+    private _errorNext: Node | null = null
+
+    constructor() {
+        this._outputs = null
+        this._state = null
+    }
+
+    init(): void { }
+
+    async run(): Promise<any> { }
+
+    async created(): Promise<void> { }
+    async beforeInitialize(): Promise<void> { }
+    async initialized(): Promise<void> { }
+    async beforeExecute(): Promise<void> { }
+    async executed(): Promise<void> { }
+    async beforeDestroy(): Promise<void> { }
 }
 
 export type NodeIDType = string | number

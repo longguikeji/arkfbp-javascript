@@ -2,8 +2,28 @@
 import express from 'express'
 import _ from 'lodash'
 
+interface IFields {
+    [key: string]: string,
+}
+
+interface IFile {
+    path: string,
+    name: string,
+    size: number,
+    type: string,
+}
+
+interface IFiles {
+    [key: string]: IFile,
+}
+
+interface IRequest extends express.Request {
+    // fields: IFields,
+    // files: IFiles,
+}
+
 /**
- * HTTP Binding
+ * HTTP Binding Request
  */
 export class Request {
 
@@ -15,7 +35,9 @@ export class Request {
     /**
      * 路由中的命名参数
      */
-    params: any = {}
+    params: {
+        [key: string]: any
+    } = {}
 
     /**
      * URL的QueryString
@@ -24,8 +46,6 @@ export class Request {
     body: string = ''
 
     cookies: any = {}
-
-
     headers: any = {}
 
     contentType: string = ''
@@ -41,11 +61,9 @@ export class Request {
     /**
      *
      */
-    files: any = []
+    files: any = {}
 
-    constructor() {}
-
-    parse(req: express.Request) {
+    parse(req: IRequest) {
         this.schema = req.protocol
         this.hostname = req.hostname
         this.method = req.method
@@ -53,22 +71,28 @@ export class Request {
         this.encodings = req.acceptsEncodings()
         this.charsets = req.acceptsCharsets()
         this.languages = req.acceptsLanguages()
-        let contentType = req.get('Content-Type')
+        const contentType = req.get('Content-Type')
         if (!!contentType) {
             this.contentType = contentType
         }
 
         for (const key in req.query) {
-            this.queryParams[key] = req.query[key]
+            if (req.query.hasOwnProperty(key)) {
+                this.queryParams[key] = req.query[key]
+            }
         }
 
         // @Todo: 同名HEADER的处理, 确认expressjs是否支持
         for (const key in req.headers) {
-            this.headers[key] = req.headers[key]
+            if (req.headers.hasOwnProperty(key)) {
+                this.headers[key] = req.headers[key]
+            }
         }
 
         for (const key in req.cookies) {
-            this.cookies[key] = req.cookies[key]
+            if (req.cookies.hasOwnProperty(key)) {
+                this.cookies[key] = req.cookies[key]
+            }
         }
 
         this.fields = _.cloneDeep(req.fields)

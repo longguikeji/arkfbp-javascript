@@ -9,7 +9,8 @@
         "experimentalDecorators": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
+        "sourceMap": false,
+        "declaration": false,
         "baseUrl": ".",
         "outDir": "./dist",
         "types": [

@@ -1,32 +1,20 @@
+import { AppState } from './appState'
+import { FlowOptions } from './flowOptions'
 import { Graph } from './graph'
 import { GraphNode } from './graphNode'
 import { IFNode } from './ifNode'
-import { NodeIDType, NodeType } from './node'
-import { State } from './state'
 import { LoopNode } from './loopNode'
+import { NodeIDType, NodeType } from './node'
 import { Request } from './request'
 import { Response } from './response'
-import { AppState } from './appState'
-
-import express from 'express'
-
-
-export class FlowOptions {
-
-    /**
-     * request object from expressjs
-     */
-    request?: any;
-
-    appState?: AppState;
-}
+import { State } from './state'
 
 export class Flow {
 
     private _graph: Graph
 
-    private _state: any
-    private _appState: any
+    private _state: State | null = null
+    private _appState: AppState | null = null
 
     private _request: Request | null = null
     private _response: Response | null = null
@@ -57,11 +45,16 @@ export class Flow {
             this._request.parse(options.request)
         }
 
+        if (options.response) {
+            this._response = options.response
+        } else {
+            this._response = new Response()
+        }
+
         if (options.appState) {
             this._appState = options.appState
         }
 
-        this._response = new Response()
     }
 
     createGraph(): Graph {
@@ -82,8 +75,12 @@ export class Flow {
         while (graphNode !== null) {
             const node = new graphNode.cls!()
 
-            node.$request = this.request
-            node.$response = this.response
+            if (this.request) {
+                node.$request = this.request
+            }
+            if (this.response) {
+                node.$response = this.response
+            }
 
             if (node.hasOwnProperty('created')) {
                 await node.created()
@@ -132,7 +129,9 @@ export class Flow {
             }
 
             lastOutputs = outputs
-            this._state.push(node)
+            if (this._state) {
+                this._state.push(node)
+            }
 
             if (node instanceof IFNode) {
                 // IF Node has two potential next and the ret stored current statement evaluated result
