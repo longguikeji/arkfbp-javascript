@@ -59,8 +59,8 @@ export class Response {
 
     // sendFile() {}
 
-    redirect(url: string) {
-        this.status = 302
+    redirect(url: string, status?: number) {
+        this.status = status ? status : 302
         this.setHeader('Location', url)
     }
 
