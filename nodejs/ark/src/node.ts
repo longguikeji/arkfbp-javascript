@@ -27,7 +27,7 @@ export class Node {
         this._state = null
     }
 
-    init(): void {}
+    init(): void { }
 
     get outputs() {
         return this._outputs
@@ -69,7 +69,7 @@ export class Node {
         this._appState = v
     }
 
-    async run(): Promise<any> {}
+    async run(): Promise<any> { }
 
     get next() {
         return this._next
@@ -87,12 +87,12 @@ export class Node {
         this._errorNext = v
     }
 
-    created(): void {}
-    beforeInitialize(): void {}
-    initialized(): void {}
-    beforeExecute(): void {}
-    executed(): void {}
-    beforeDestroy(): void {}
+    created(): void { }
+    beforeInitialize(): void { }
+    initialized(): void { }
+    beforeExecute(): void { }
+    executed(): void { }
+    beforeDestroy(): void { }
 }
 
 export type NodeIDType = string | number
