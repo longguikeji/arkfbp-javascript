@@ -107,5 +107,11 @@ export class Request {
                 }
             }
         }
+
+        for (const name in req.params) {
+            if (req.params.hasOwnProperty(name)) {
+                this.params[name] = req.params[name]
+            }
+        }
     }
 }
