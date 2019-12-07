@@ -50,7 +50,7 @@ export class Response {
     }
 
     setCookie(name: string, value: string, options: CookieSerializeOptions = {}) {
-        this.append(name, cookie.serialize(name, String(value), options))
+        this.append('Set-Cookie', cookie.serialize(name, String(value), options))
     }
 
     setContentType(value: string) {
