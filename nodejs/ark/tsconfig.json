@@ -2,6 +2,7 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
+        "declaration": true,
         "strict": true,
         "jsx": "preserve",
         "importHelpers": true,
@@ -11,7 +12,7 @@
         "allowSyntheticDefaultImports": true,
         "sourceMap": false,
         "baseUrl": ".",
-        "outDir": "./dist",
+        "outDir": "./lib",
         "types": [
         ],
         "paths": {

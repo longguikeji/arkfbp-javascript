@@ -63,7 +63,7 @@ export class Request {
      */
     files: any = {}
 
-    parse(req: IRequest) {
+    parse(req: any) {
         this.schema = req.protocol
         this.hostname = req.hostname
         this.method = req.method
