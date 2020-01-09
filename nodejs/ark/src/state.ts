@@ -1,9 +1,11 @@
 import { Node } from './node'
+import { writeFileSync } from 'fs'
 
 export class State {
 
     private _userData: any = {}
     private _nodes: Map<number | string, any>
+    private _steps: any[] = []
 
     constructor() {
         this._nodes = new Map()
@@ -40,6 +42,24 @@ export class State {
         } else {
             this._nodes.get(node.id).push(node)
         }
+
+        this._steps.push(node)
     }
 
+    get steps() {
+        const steps: any = []
+
+        for (const step of this._steps) {
+            const stepData = {
+                id: step.id,
+                name: step.name,
+                inputs: {},
+                outputs: {},
+                state: {},
+            }
+
+            steps.push(stepData)
+        }
+        return steps
+    }
 }

@@ -8,6 +8,7 @@ import { NodeIDType, NodeType } from './node'
 import { Request } from './request'
 import { Response } from './response'
 import { State } from './state'
+import { writeFileSync } from 'fs'
 
 export class Flow {
 
@@ -18,6 +19,13 @@ export class Flow {
 
     private _request: Request | null = null
     private _response: Response | null = null
+
+    private _debug: boolean = false
+    private _debugStatePersistentFile: string = ''
+
+    private _inputs: any = null
+    private _outputs: any = null
+    private _status: string = 'CREATED'
 
     get request(): Request | null {
         return this._request
@@ -55,12 +63,21 @@ export class Flow {
             this._appState = options.appState
         }
 
+        if (options.debug) {
+            this._debug = options.debug
+        }
+
+        if (options.debugStatePersistentFile) {
+            this._debugStatePersistentFile = options.debugStatePersistentFile
+        }
+
     }
 
     createGraph(): Graph {
         return new Graph()
     }
 
+    // tslint:disable-next-line: no-empty
     init() {}
 
     async main(inputs?: any | null) {
@@ -68,7 +85,11 @@ export class Flow {
 
         if (inputs !== null) {
             lastOutputs = inputs
+            this._inputs = inputs
         }
+
+        this._status = 'RUNNING'
+        this.dumpLogFile()
 
         let graphNode: GraphNode | null = this._graph.nodes[0]
         let nextGraphNodeId: NodeIDType | undefined
@@ -132,6 +153,7 @@ export class Flow {
             if (this._state) {
                 this._state.push(node)
             }
+            this.dumpLogFile()
 
             if (node instanceof IFNode) {
                 // IF Node has two potential next and the ret stored current statement evaluated result
@@ -152,13 +174,32 @@ export class Flow {
 
         }
 
+        this._outputs = lastOutputs
+        this.dumpLogFile()
+        this._status = 'STOPPED'
         return lastOutputs
     }
 
+    dumpLogFile() {
+        if (!this._debug) return
+        // tslint:disable-next-line: no-any
+        const data: any = {}
+        data.status = this._status
+        data.inputs = this._inputs
+        data.steps = this._state?.steps
+        data.outputs = this._outputs
+        writeFileSync(this._debugStatePersistentFile, JSON.stringify(data))
+    }
+
+    // tslint:disable-next-line: no-empty
     beforeInitialize() { }
+    // tslint:disable-next-line: no-empty
     initialized() { }
+    // tslint:disable-next-line: no-empty
     beforeExecute() { }
+    // tslint:disable-next-line: no-empty
     executed() { }
+    // tslint:disable-next-line: no-empty
     beforeDestroy() { }
 }
 

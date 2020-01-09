@@ -10,4 +10,8 @@ export class FlowOptions {
     response?: Response
 
     appState?: AppState
+
+    debug?: boolean
+
+    debugStatePersistentFile?: string
 }
