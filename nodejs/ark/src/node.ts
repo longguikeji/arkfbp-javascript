@@ -85,11 +85,16 @@ export class Node {
         this._state = null
     }
 
+    // tslint:disable-next-line: no-empty
     init(): void { }
 
+    // tslint:disable-next-line: no-empty
     async run(): Promise<any> { }
 
+    // tslint:disable-next-line: no-empty
     async created(): Promise<void> { }
+
+    // tslint:disable-next-line: no-empty
     async beforeInitialize(): Promise<void> { }
     async initialized(): Promise<void> { }
     async beforeExecute(): Promise<void> { }

@@ -1,3 +1,4 @@
+import { writeFileSync } from 'fs'
 import { AppState } from './appState'
 import { FlowOptions } from './flowOptions'
 import { Graph } from './graph'
@@ -8,7 +9,7 @@ import { NodeIDType, NodeType } from './node'
 import { Request } from './request'
 import { Response } from './response'
 import { State } from './state'
-import { writeFileSync } from 'fs'
+import { TestNode } from './testNode'
 
 export class Flow {
 
@@ -80,6 +81,62 @@ export class Flow {
     // tslint:disable-next-line: no-empty
     init() {}
 
+    async executeTestNode(node: TestNode) {
+        const cls = node.constructor as typeof TestNode
+        let testcases = []
+        testcases = Object.getOwnPropertyNames(Object.getPrototypeOf(node))
+        testcases = testcases.sort().filter((e, i, arr) => {
+            if (e !== arr[i + 1] && typeof (node as any)[e] === 'function' && e.startsWith('test')) return true
+        })
+        const n = testcases.length
+        // tslint:disable-next-line: no-console
+        console.info(`${n} testcases`)
+
+        const flow = node.flow as typeof Flow
+        const startNodeId = node.start
+        const stopNodeId = node.stop
+
+        for (let i = 0; i < n; ++i) {
+            const testcase = testcases[i]
+            const testFn = (node as any)[testcase]
+            const isAsync = testFn.constructor.name === 'AsyncFunction'
+            if (isAsync) {
+                // tslint:disable-next-line: no-console
+                console.info(`[skip] ${testcase}`)
+                // testFn()
+                //     .then(() => {
+                //         console.info(`[ok] ${testcase}`)
+                //     })
+                //     .catch((error) => {
+                //         console.info(`[fail] ${testcase}`)
+                //     })
+                continue
+            }
+            const instance = new cls()
+            // setUp
+            instance.setUp()
+
+            // run workflow
+            const inputs = {}
+            const outputs = await runWorkflowByClass(flow, inputs)
+
+            instance.outputs = outputs
+
+            // run testcase function
+            try {
+                testFn()
+                // tslint:disable-next-line: no-console
+                console.info(`[ok] ${testcase}`)
+            } catch (error) {
+                // tslint:disable-next-line: no-console
+                console.info(`[fail] ${testcase}`)
+            }
+
+            // tearDown
+            instance.tearDown()
+        }
+    }
+
     async main(inputs?: any | null) {
         let lastOutputs = null
 
@@ -137,7 +194,12 @@ export class Flow {
                 // @Todo: how to execute of the loop body?
             }
 
-            const outputs = await node.run()
+            let outputs
+            if (node instanceof TestNode) {
+                outputs = await this.executeTestNode(node)
+            } else {
+                outputs = await node.run()
+            }
 
             if (node.hasOwnProperty('executed')) {
                 await node.executed()
@@ -211,6 +273,11 @@ export async function importWorkflowByFile(filename: string) {
 export async function runWorkflowByFile(filename: string, inputs?: any, options?: FlowOptions) {
     const ns = await import(filename)
     const flow = new ns.Main(options)
+    return runWorkflow(flow, inputs)
+}
+
+export async function runWorkflowByClass(cls: typeof Flow, inputs?: any) {
+    const flow = new cls()
     return runWorkflow(flow, inputs)
 }
 
