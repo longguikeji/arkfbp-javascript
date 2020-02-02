@@ -1,4 +1,5 @@
 import { AppState } from './appState'
+import { NodeIDType } from './node'
 import { Response } from './response'
 
 export class FlowOptions {
@@ -14,4 +15,14 @@ export class FlowOptions {
     debug?: boolean
 
     debugStatePersistentFile?: string
+
+    /**
+     * optional to set the start entry
+     */
+    startId?: NodeIDType
+
+    /**
+     * optional to set the stop point
+     */
+    stopId?: NodeIDType
 }

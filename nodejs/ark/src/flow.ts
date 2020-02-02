@@ -10,9 +10,11 @@ import { Request } from './request'
 import { Response } from './response'
 import { State } from './state'
 import { TestNode } from './testNode'
+import { isAsync } from './utils'
 
 export class Flow {
 
+    private _options: FlowOptions
     private _graph: Graph
 
     private _state: State | null = null
@@ -50,6 +52,8 @@ export class Flow {
 
         this._request = new Request()
 
+        this._options = options
+
         if (options.request) {
             this._request.parse(options.request)
         }
@@ -79,62 +83,26 @@ export class Flow {
     }
 
     // tslint:disable-next-line: no-empty
-    init() {}
+    init() { }
 
-    async executeTestNode(node: TestNode) {
-        const cls = node.constructor as typeof TestNode
-        let testcases = []
-        testcases = Object.getOwnPropertyNames(Object.getPrototypeOf(node))
-        testcases = testcases.sort().filter((e, i, arr) => {
-            if (e !== arr[i + 1] && typeof (node as any)[e] === 'function' && e.startsWith('test')) return true
-        })
-        const n = testcases.length
-        // tslint:disable-next-line: no-console
-        console.info(`${n} testcases`)
-
-        const flow = node.flow as typeof Flow
-        const startNodeId = node.start
-        const stopNodeId = node.stop
-
-        for (let i = 0; i < n; ++i) {
-            const testcase = testcases[i]
-            const testFn = (node as any)[testcase]
-            const isAsync = testFn.constructor.name === 'AsyncFunction'
-            if (isAsync) {
-                // tslint:disable-next-line: no-console
-                console.info(`[skip] ${testcase}`)
-                // testFn()
-                //     .then(() => {
-                //         console.info(`[ok] ${testcase}`)
-                //     })
-                //     .catch((error) => {
-                //         console.info(`[fail] ${testcase}`)
-                //     })
-                continue
+    getNextGraphNode(graphNode: GraphNode, node: any): GraphNode | null {
+        let nextGraphNodeId
+        if (node instanceof IFNode) {
+            // IF Node has two potential next and the ret stored current statement evaluated result
+            if (node.ret) {
+                nextGraphNodeId = graphNode.positiveNext
+            } else {
+                nextGraphNodeId = graphNode.negativeNext
             }
-            const instance = new cls()
-            // setUp
-            instance.setUp()
-
-            // run workflow
-            const inputs = {}
-            const outputs = await runWorkflowByClass(flow, inputs)
-
-            instance.outputs = outputs
-
-            // run testcase function
-            try {
-                testFn()
-                // tslint:disable-next-line: no-console
-                console.info(`[ok] ${testcase}`)
-            } catch (error) {
-                // tslint:disable-next-line: no-console
-                console.info(`[fail] ${testcase}`)
-            }
-
-            // tearDown
-            instance.tearDown()
+        } else {
+            nextGraphNodeId = graphNode.next
         }
+
+        if (nextGraphNodeId) {
+            return this._graph.getNodeById(nextGraphNodeId)
+        }
+
+        return null
     }
 
     async main(inputs?: any | null) {
@@ -149,9 +117,23 @@ export class Flow {
         this.dumpLogFile()
 
         let graphNode: GraphNode | null = this._graph.nodes[0]
-        let nextGraphNodeId: NodeIDType | undefined
+        let canExecute: boolean = false
+        let shouldStop: boolean = false
         while (graphNode !== null) {
+            if (this._options.startId && !canExecute) {
+                if (graphNode.id === this._options.startId) {
+                    canExecute = true
+                }
+            } else {
+                canExecute = true
+            }
+
             const node = new graphNode.cls!()
+
+            if (!canExecute) {
+                graphNode = this.getNextGraphNode(graphNode, node)
+                continue
+            }
 
             if (this.request) {
                 node.$request = this.request
@@ -194,12 +176,7 @@ export class Flow {
                 // @Todo: how to execute of the loop body?
             }
 
-            let outputs
-            if (node instanceof TestNode) {
-                outputs = await this.executeTestNode(node)
-            } else {
-                outputs = await node.run()
-            }
+            const outputs = await node.run()
 
             if (node.hasOwnProperty('executed')) {
                 await node.executed()
@@ -217,23 +194,19 @@ export class Flow {
             }
             this.dumpLogFile()
 
-            if (node instanceof IFNode) {
-                // IF Node has two potential next and the ret stored current statement evaluated result
-                if (node.ret) {
-                    nextGraphNodeId = graphNode.positiveNext
-                } else {
-                    nextGraphNodeId = graphNode.negativeNext
-                }
-            } else {
-                nextGraphNodeId = graphNode.next
+            if (this._options.stopId && this._options.stopId === graphNode.id) {
+                shouldStop = true
             }
 
-            if (nextGraphNodeId) {
-                graphNode = this._graph.getNodeById(nextGraphNodeId)
-            } else {
-                graphNode = null
+            graphNode = this.getNextGraphNode(graphNode, node)
+
+            if (graphNode === null) {
+                shouldStop = true
             }
 
+            if (shouldStop) {
+                break
+            }
         }
 
         this._outputs = lastOutputs
@@ -276,8 +249,8 @@ export async function runWorkflowByFile(filename: string, inputs?: any, options?
     return runWorkflow(flow, inputs)
 }
 
-export async function runWorkflowByClass(cls: typeof Flow, inputs?: any) {
-    const flow = new cls()
+export async function runWorkflowByClass(cls: typeof Flow, inputs?: any, options?: FlowOptions) {
+    const flow = new cls(options)
     return runWorkflow(flow, inputs)
 }
 
