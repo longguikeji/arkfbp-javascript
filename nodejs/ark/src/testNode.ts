@@ -11,6 +11,8 @@ export class TestNode extends Node {
     start: NodeIDType | null | undefined
     stop: NodeIDType | null | undefined
 
+    outputs: any
+
     // tslint:disable-next-line: no-empty
     setUp() { }
 
@@ -34,13 +36,16 @@ export class TestNode extends Node {
 
         for (let i = 0; i < n; ++i) {
             const testcase = testcases[i]
-            const testFn = (this as any)[testcase]
+
+            const instance = new cls()
+
+            const testFn = (instance as any)[testcase]
             if (isAsync(testFn)) {
                 // tslint:disable-next-line: no-console
                 console.info(`[skip] ${testcase}`)
                 continue
             }
-            const instance = new cls()
+
             // setUp
             instance.setUp()
 
@@ -55,17 +60,18 @@ export class TestNode extends Node {
             }
 
             const outputs = await runWorkflowByClass(flow, inputs, flowOptions)
-
             instance.outputs = outputs
 
             // run testcase function
             try {
-                testFn()
+                testFn.call(instance)
                 // tslint:disable-next-line: no-console
                 console.info(`[ok] ${testcase}`)
             } catch (error) {
                 // tslint:disable-next-line: no-console
                 console.info(`[fail] ${testcase}`)
+                // tslint:disable-next-line: no-console
+                console.info(error)
             }
 
             // tearDown
