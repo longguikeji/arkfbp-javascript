@@ -17,7 +17,7 @@ export class Flow {
     async main(inputs?: any | null) {
         let lastOutputs = null
 
-        if (inputs === null) {
+        if (inputs !== null) {
             lastOutputs = inputs
         }
 
@@ -52,12 +52,12 @@ export class Flow {
     }
 }
 
-export async function runWorkflow(flow: typeof Flow) {
+export async function runWorkflow(flow: typeof Flow, inputs?: any | null) {
     // const ns = await import(flowFile)
     // const flow = new ns.Main()
     // const ret = await flow.main()
     // return ret
     const instance = new flow()
-    const ret = await instance.main()
+    const ret = await instance.main(inputs)
     return ret
 }
