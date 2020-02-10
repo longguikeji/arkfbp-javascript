@@ -52,7 +52,7 @@ export class Flow {
     }
 }
 
-export async function runWorkflow(flow: Flow) {
+export async function runWorkflow(flow: typeof Flow) {
     // const ns = await import(flowFile)
     // const flow = new ns.Main()
     // const ret = await flow.main()

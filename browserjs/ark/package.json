@@ -1,13 +1,13 @@
 {
-  "name": "",
-  "version": "0.0.0",
-  "description": "",
+  "name": "arkfbp-browser",
+  "version": "0.0.1",
+  "description": "ark flow based programming browser version",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "files": [
     "build/src"
   ],
-  "license": "Apache-2.0",
+  "license": "LGPL",
   "keywords": [],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,7 +17,8 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "posttest": "npm run check"
+    "posttest": "npm run check",
+    "prepublish": "tsc"
   },
   "devDependencies": {
     "gts": "^1.1.2",
