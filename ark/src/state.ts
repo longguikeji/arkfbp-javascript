@@ -1,5 +1,4 @@
 import { Node } from './node'
-import { writeFileSync } from 'fs'
 
 export class State {
 
