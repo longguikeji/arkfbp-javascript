@@ -43,7 +43,6 @@ export class Request {
      * URL的QueryString
      */
     queryParams: any = {}
-    body: string = ''
 
     cookies: any = {}
     headers: any = {}
@@ -63,7 +62,10 @@ export class Request {
      */
     files: any = {}
 
+    body: any = {}
+
     parse(req: any) {
+        this.body = req.body
         this.schema = req.protocol
         this.hostname = req.hostname
         this.method = req.method

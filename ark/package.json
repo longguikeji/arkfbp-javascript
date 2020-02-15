@@ -1,6 +1,6 @@
 {
   "name": "arkfbp",
-  "version": "0.0.31",
+  "version": "0.0.32-rc",
   "description": "ark flow based programming nodejs version",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
