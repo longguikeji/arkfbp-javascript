@@ -42,6 +42,14 @@ export class Node {
         this._appState = v
     }
 
+    get $options() {
+        return this._options
+    }
+
+    set $options(v: any) {
+        this._options = v
+    }
+
     get next() {
         return this._next
     }
@@ -66,6 +74,8 @@ export class Node {
 
     private _outputs: any | null = null
     private _inputs: any | null = null
+
+    private _options: any // the options to start the flow
 
     /**
      * Flow level state sharing

@@ -14,6 +14,8 @@ import { isAsync } from './utils'
 
 export class Flow {
 
+    private _userOptions: any
+
     private _options: FlowOptions
     private _graph: Graph
 
@@ -116,6 +118,8 @@ export class Flow {
         this._status = 'RUNNING'
         this.dumpLogFile()
 
+        this._userOptions = inputs ? inputs : {}
+
         let graphNode: GraphNode | null = this._graph.nodes[0]
         let canExecute: boolean = false
         let shouldStop: boolean = false
@@ -141,6 +145,8 @@ export class Flow {
             if (this.response) {
                 node.$response = this.response
             }
+
+            node.$options = this._userOptions
 
             if (node.hasOwnProperty('created')) {
                 await node.created()
