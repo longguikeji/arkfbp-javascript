@@ -13,6 +13,8 @@ export class APINode extends Node {
     headers: any | null = null
     params: any | null = null
 
+    buildParams?: () => {}
+
     /**
      * API Node执行结果，方便重载的时候获取更多除了data的额外信息
      */
@@ -26,22 +28,30 @@ export class APINode extends Node {
     async run() {
         switch (this.mode) {
             case 'direct':
-                return await this._request_direct()
+                return this._requestDirect()
 
             case 'proxy':
-                return await this._request_proxy()
+                return this._requestProxy()
 
             default:
                 break
         }
     }
 
-    async _request_direct() {
+    _getParams(): any {
+        if (typeof this.buildParams !== 'undefined') {
+            return this.buildParams()
+        }
+
+        return this.params
+    }
+
+    async _requestDirect() {
         const options = {
             url: this.url,
             headers: this.headers,
             method: this.method as Method,
-            data: this.params,
+            data: this._getParams(),
         }
 
         const resp = await axios(options)
@@ -56,7 +66,7 @@ export class APINode extends Node {
         return resp.data
     }
 
-    async _request_proxy() {
+    async _requestProxy() {
         return null
     }
 }
