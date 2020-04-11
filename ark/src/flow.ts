@@ -179,7 +179,13 @@ export class Flow {
             }
 
             if (node instanceof LoopNode) {
-                // @Todo: how to execute of the loop body?
+                if (graphNode.body) {
+                    // if we defined the body in the graph then use it, otherwise we set empty
+                    const loopBodyCls = this._graph.getNodeById(graphNode.body)!.cls
+                    if (typeof loopBodyCls !== 'undefined') {
+                        node.body = this._graph.getNodeById(graphNode.body)!.cls
+                    }
+                }
             }
 
             const outputs = await node.run()

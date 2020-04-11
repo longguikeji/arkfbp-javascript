@@ -4,6 +4,8 @@ export class LoopNode extends Node {
 
     name = 'loop'
 
+    body?: any
+
     async initStatement() {
         return
     }
@@ -20,19 +22,24 @@ export class LoopNode extends Node {
         return
     }
 
+    async executeBody(options?: any) {
+        if (this.body) {
+            const node = new this.body()
+            node.inputs = options
+            return node.run()
+        }
+
+        return
+    }
+
     async run() {
         await this.initStatement()
 
         while (await this.conditionStatement()) {
-            await this.process()
+            const options = this.process()
+            await this.executeBody(options)
             await this.postStatement()
         }
-        /**
-         * for (let i = 0; i < 10; ++i )}
-         *      process(i)
-         * }
-         */
-
     }
 
 }
