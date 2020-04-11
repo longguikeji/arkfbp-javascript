@@ -1,0 +1,38 @@
+import { FlowOptions } from './flowOptions';
+import { Graph } from './graph';
+import { GraphNode } from './graphNode';
+import { Request } from './request';
+import { Response } from './response';
+export declare class Flow {
+    private _userOptions;
+    private _options;
+    private _graph;
+    private _state;
+    private _appState;
+    private _request;
+    private _response;
+    private _debug;
+    private _debugStatePersistentFile;
+    private _inputs;
+    private _outputs;
+    private _status;
+    get request(): Request | null;
+    set request(v: Request | null);
+    get response(): Response | null;
+    set response(v: Response | null);
+    constructor(options?: FlowOptions);
+    createGraph(): Graph;
+    init(): void;
+    getNextGraphNode(graphNode: GraphNode, node: any): GraphNode | null;
+    main(inputs?: any | null): Promise<any>;
+    dumpLogFile(): void;
+    beforeInitialize(): void;
+    initialized(): void;
+    beforeExecute(): void;
+    executed(): void;
+    beforeDestroy(): void;
+}
+export declare function importWorkflowByFile(filename: string): Promise<any>;
+export declare function runWorkflowByFile(filename: string, inputs?: any, options?: FlowOptions): Promise<any>;
+export declare function runWorkflowByClass(cls: typeof Flow, inputs?: any, options?: FlowOptions): Promise<any>;
+export declare function runWorkflow(flow: Flow, inputs?: any): Promise<any>;
