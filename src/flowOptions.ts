@@ -16,6 +16,8 @@ export class FlowOptions {
 
     debugStatePersistentFile?: string
 
+    verbose?: boolean = false
+
     /**
      * optional to set the start entry
      */

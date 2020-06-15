@@ -1,15 +1,15 @@
 import { Flow, runWorkflowByClass } from './flow'
+import { FlowOptions } from './flowOptions'
 import { Node, NodeIDType } from './node'
 import { isAsync } from './utils'
-import { FlowOptions } from './flowOptions'
 
 export class TestNode extends Node {
 
     name = 'test'
 
-    flow: any
-    start: NodeIDType | null | undefined
-    stop: NodeIDType | null | undefined
+    flow?: any
+    start?: NodeIDType | null | undefined
+    stop?: NodeIDType | null | undefined
 
     outputs: any
 
@@ -59,8 +59,10 @@ export class TestNode extends Node {
                 flowOptions.stopId = stopNodeId
             }
 
-            const outputs = await runWorkflowByClass(flow, inputs, flowOptions)
-            instance.outputs = outputs
+            if (typeof flow !== 'undefined') {
+                const outputs = await runWorkflowByClass(flow, inputs, flowOptions)
+                instance.outputs = outputs
+            }
 
             // run testcase function
             try {

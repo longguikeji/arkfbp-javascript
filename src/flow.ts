@@ -11,6 +11,7 @@ import { Response } from './response'
 import { State } from './state'
 import { TestNode } from './testNode'
 import { isAsync } from './utils'
+import chalk from 'chalk'
 
 export class Flow {
 
@@ -31,6 +32,9 @@ export class Flow {
     private _inputs: any = null
     private _outputs: any = null
     private _status: string = 'CREATED'
+
+    private _verbose: boolean = false
+    private _step: number = 0
 
     get request(): Request | null {
         return this._request
@@ -76,6 +80,10 @@ export class Flow {
 
         if (options.debugStatePersistentFile) {
             this._debugStatePersistentFile = options.debugStatePersistentFile
+        }
+
+        if (options.verbose) {
+            this._verbose = options.verbose
         }
 
     }
@@ -124,6 +132,7 @@ export class Flow {
         let canExecute: boolean = false
         let shouldStop: boolean = false
         while (graphNode !== null) {
+            this._step += 1
             if (this._options.startId && !canExecute) {
                 if (graphNode.id === this._options.startId) {
                     canExecute = true
@@ -188,7 +197,39 @@ export class Flow {
                 }
             }
 
-            const outputs = await node.run()
+            let outputs
+
+            try {
+                outputs = await node.run()
+            } catch (err) {
+                console.log(chalk.red.underline(`\n>>> #STEP-${this._step} NODE[#${node.id}]ERROR`))
+                console.log('\t', chalk.bgGray(`Inputs: ${JSON.stringify(node.inputs)}`))
+                console.log('\t', chalk.bgMagenta(`App State: ${JSON.stringify(this._appState?.fetch())}`))
+                console.log('\t', chalk.bgBlue(`Flow State: ${JSON.stringify(this._state?.fetch())}`))
+                console.log('\t', chalk.bgCyan(`Outputs: ${JSON.stringify(node.outputs)}`))
+
+                const regEx = new RegExp(`${process.cwd()}\\/(?!node_modules\\/)([\\/\\w-_\\.]+\\.js):(\\d*):(\\d*)`)
+                const [, filename, line, column] = err.stack.match(regEx)
+
+                console.log('\t', chalk.bgRed(`Error: ${err.name} ${err.message} ${filename}:${line}:${column}`))
+
+                this._status = 'ERROR'
+            }
+
+            /**
+             * if there's no error property set in this node, we will stop the flow
+             * otherwise we will redirect to the error setted node
+             */
+
+            if (this._status === 'RUNNING') {
+                if (this._verbose) {
+                    console.log(chalk.green.underline(`\n>>> #STEP - ${this._step} NODE[#${node.id}]SUCCESS`))
+                    console.log('\t', chalk.bgGray(`Inputs: ${JSON.stringify(node.inputs)}`))
+                    console.log('\t', chalk.bgMagenta(`App State: ${JSON.stringify(this._appState?.fetch())}`))
+                    console.log('\t', chalk.bgBlue(`Flow State: ${JSON.stringify(this._state?.fetch())}`))
+                    console.log('\t', chalk.bgCyan(`Outputs: ${JSON.stringify(node.outputs)}`))
+                }
+            }
 
             if (node.hasOwnProperty('executed')) {
                 await node.executed()
