@@ -24,9 +24,11 @@ export class TestNode extends Node {
         let testcases = []
         testcases = Object.getOwnPropertyNames(Object.getPrototypeOf(this))
         testcases = testcases.sort().filter((e, i, arr) => {
-            if (e !== arr[i + 1] && typeof (this as any)[e] === 'function' && e.startsWith('test')) return true
+            if (e !== arr[i + 1] && typeof (this as any)[e] === 'function' && e.startsWith('test') && e.indexOf('SetUp') === -1 && e.indexOf('TearDown') === -1) return true
+            return false
         })
         const n = testcases.length
+
         // tslint:disable-next-line: no-console
         console.info(`${n} testcases`)
 
@@ -36,6 +38,9 @@ export class TestNode extends Node {
 
         for (let i = 0; i < n; ++i) {
             const testcase = testcases[i]
+            if (testcase.indexOf('SetUp') >= 0 || testcase.indexOf('TearDown') >= 0) {
+                continue
+            }
 
             const instance = new cls()
 
@@ -49,8 +54,12 @@ export class TestNode extends Node {
             // setUp
             instance.setUp()
 
+            const caseSetUpFunction = (this as any)[`${testcase}SetUp`] as Function
+            if (typeof caseSetUpFunction === 'function') {
+                caseSetUpFunction.bind(instance)()
+            }
+
             // run workflow
-            const inputs = {}
             const flowOptions: FlowOptions = new FlowOptions()
             if (startNodeId) {
                 flowOptions.startId = startNodeId
@@ -60,7 +69,7 @@ export class TestNode extends Node {
             }
 
             if (typeof flow !== 'undefined') {
-                const outputs = await runWorkflowByClass(flow, inputs, flowOptions)
+                const outputs = await runWorkflowByClass(flow, instance.inputs, flowOptions)
                 instance.outputs = outputs
             }
 
@@ -74,6 +83,11 @@ export class TestNode extends Node {
                 console.info(`[fail] ${testcase}`)
                 // tslint:disable-next-line: no-console
                 console.info(error)
+            }
+
+            const caseTearDownFunction = (this as any)[`${testcase}TearDown`] as Function
+            if (typeof caseTearDownFunction === 'function') {
+                caseTearDownFunction.bind(instance)()
             }
 
             // tearDown
