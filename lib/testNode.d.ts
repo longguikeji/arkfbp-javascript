@@ -5,7 +5,7 @@ export declare class TestNode extends Node {
     start?: NodeIDType | null | undefined;
     stop?: NodeIDType | null | undefined;
     outputs: any;
-    setUp(): void;
-    tearDown(): void;
+    setUp(): Promise<void>;
+    tearDown(): Promise<void>;
     run(): Promise<void>;
 }

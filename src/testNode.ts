@@ -14,10 +14,10 @@ export class TestNode extends Node {
     outputs: any
 
     // tslint:disable-next-line: no-empty
-    setUp() { }
+    async setUp() { }
 
     // tslint:disable-next-line: no-empty
-    tearDown() { }
+    async tearDown() { }
 
     async run() {
         const cls = this.constructor as typeof TestNode
@@ -45,14 +45,14 @@ export class TestNode extends Node {
             const instance = new cls()
 
             const testFn = (instance as any)[testcase]
-            if (isAsync(testFn)) {
-                // tslint:disable-next-line: no-console
-                console.info(`[skip] ${testcase}`)
-                continue
-            }
+            // if (isAsync(testFn)) {
+            //     // tslint:disable-next-line: no-console
+            //     console.info(`[skip] ${testcase}`)
+            //     continue
+            // }
 
             // setUp
-            instance.setUp()
+            await instance.setUp()
 
             const caseSetUpFunction = (this as any)[`${testcase}SetUp`] as Function
             if (typeof caseSetUpFunction === 'function') {
@@ -75,7 +75,7 @@ export class TestNode extends Node {
 
             // run testcase function
             try {
-                testFn.call(instance)
+                await testFn.call(instance)
                 // tslint:disable-next-line: no-console
                 console.info(`[ok] ${testcase}`)
             } catch (error) {
@@ -91,7 +91,7 @@ export class TestNode extends Node {
             }
 
             // tearDown
-            instance.tearDown()
+            await instance.tearDown()
         }
     }
 }

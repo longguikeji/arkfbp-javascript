@@ -202,7 +202,7 @@ export class Flow {
             try {
                 outputs = await node.run()
             } catch (err) {
-                console.log(chalk.red.underline(`\n>>> #STEP-${this._step} NODE[#${node.id}:${node.name}]ERROR`))
+                console.log(chalk.red.underline(`\n>>> #STEP-${this._step} NODE[#${node.id}]ERROR`))
                 console.log('\t', chalk.bgGray(`Inputs: ${JSON.stringify(lastOutputs)}`))
                 console.log('\t', chalk.bgMagenta(`App State: ${JSON.stringify(this._appState?.fetch())}`))
                 console.log('\t', chalk.bgBlue(`Flow State: ${JSON.stringify(this._state?.fetch())}`))
