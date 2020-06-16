@@ -1,3 +1,4 @@
+import chalk from 'chalk'
 import { writeFileSync } from 'fs'
 import { AppState } from './appState'
 import { FlowOptions } from './flowOptions'
@@ -11,7 +12,6 @@ import { Response } from './response'
 import { State } from './state'
 import { TestNode } from './testNode'
 import { isAsync } from './utils'
-import chalk from 'chalk'
 
 export class Flow {
 
@@ -202,8 +202,8 @@ export class Flow {
             try {
                 outputs = await node.run()
             } catch (err) {
-                console.log(chalk.red.underline(`\n>>> #STEP-${this._step} NODE[#${node.id}]ERROR`))
-                console.log('\t', chalk.bgGray(`Inputs: ${JSON.stringify(node.inputs)}`))
+                console.log(chalk.red.underline(`\n>>> #STEP-${this._step} NODE[#${node.id}:${node.name}]ERROR`))
+                console.log('\t', chalk.bgGray(`Inputs: ${JSON.stringify(lastOutputs)}`))
                 console.log('\t', chalk.bgMagenta(`App State: ${JSON.stringify(this._appState?.fetch())}`))
                 console.log('\t', chalk.bgBlue(`Flow State: ${JSON.stringify(this._state?.fetch())}`))
                 console.log('\t', chalk.bgCyan(`Outputs: ${JSON.stringify(node.outputs)}`))
@@ -214,6 +214,9 @@ export class Flow {
                 console.log('\t', chalk.bgRed(`Error: ${err.name} ${err.message} ${filename}:${line}:${column}`))
 
                 this._status = 'ERROR'
+
+                // @Todo: 节点增加error属性，用于指定发生异常错误的处理节点
+                break
             }
 
             /**
@@ -223,7 +226,7 @@ export class Flow {
 
             if (this._status === 'RUNNING') {
                 if (this._verbose) {
-                    console.log(chalk.green.underline(`\n>>> #STEP - ${this._step} NODE[#${node.id}]SUCCESS`))
+                    console.log(chalk.green.underline(`\n>>> #STEP - ${this._step} NODE[#${node.id}:${node.name}]SUCCESS`))
                     console.log('\t', chalk.bgGray(`Inputs: ${JSON.stringify(node.inputs)}`))
                     console.log('\t', chalk.bgMagenta(`App State: ${JSON.stringify(this._appState?.fetch())}`))
                     console.log('\t', chalk.bgBlue(`Flow State: ${JSON.stringify(this._state?.fetch())}`))

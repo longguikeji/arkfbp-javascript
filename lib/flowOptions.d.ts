@@ -10,6 +10,7 @@ export declare class FlowOptions {
     appState?: AppState;
     debug?: boolean;
     debugStatePersistentFile?: string;
+    verbose?: boolean;
     /**
      * optional to set the start entry
      */

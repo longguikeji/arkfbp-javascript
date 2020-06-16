@@ -1,18 +1,30 @@
 {
   "name": "arkfbp",
-  "version": "0.0.36",
-  "description": "ark flow based programming nodejs version",
+  "version": "0.0.2",
+  "description": "Javascript implementation of ArkFBP Framework, with NodeJS & Browser supported",
+  "author": "Rock Lee <insfocus@gmail.com>",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib/**/*"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arkfbp/arkfbp-javascript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arkfbp/arkfbp-javascript/issues"
+  },
+  "homepage": "https://github.com/arkfbp/arkfbp-javascript",
   "license": "LGPL",
-  "keywords": [],
+  "keywords": [
+    "arkfbp"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "check": "gts check",
     "clean": "gts clean",
+    "watch": "tsc -w -p .",
     "compile": "tsc -p .",
     "fix": "gts fix",
     "prepare": "npm run compile",
@@ -31,6 +43,7 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
+    "chalk": "^4.1.0",
     "config-yml": "^0.10.3",
     "cookie": "^0.4.0",
     "debug": "^4.1.1",

@@ -16,6 +16,8 @@ export declare class Flow {
     private _inputs;
     private _outputs;
     private _status;
+    private _verbose;
+    private _step;
     get request(): Request | null;
     set request(v: Request | null);
     get response(): Response | null;
