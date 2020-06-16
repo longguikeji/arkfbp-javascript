@@ -1,7 +1,7 @@
 import { runWorkflowByClass } from './flow'
 import { Node } from './node'
 
-export class TriggerFlowNode extends Node {
+export class FlowNode extends Node {
 
     name = 'triggerFlow'
 
