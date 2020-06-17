@@ -3,11 +3,15 @@ import { Node } from './node'
 
 export class FlowNode extends Node {
 
-    name = 'triggerFlow'
+    name = 'Flow'
 
     flow?: any
 
     buildOptions?: any
+
+    buildInputs() {
+        return this.inputs
+    }
 
     async run() {
         if (typeof this.flow === 'undefined') {
@@ -15,7 +19,7 @@ export class FlowNode extends Node {
         }
 
         const flowOptions = this.buildOptions ? this.buildOptions() : undefined
-        const outputs = await runWorkflowByClass(this.flow, this.inputs, flowOptions)
+        const outputs = await runWorkflowByClass(this.flow, this.buildInputs(), flowOptions)
         return outputs
     }
 
