@@ -1,6 +1,6 @@
 {
   "name": "arkfbp",
-  "version": "0.0.2",
+  "version": "0.0.3-rc",
   "description": "Javascript implementation of ArkFBP Framework, with NodeJS & Browser supported",
   "author": "Rock Lee <insfocus@gmail.com>",
   "main": "lib/index.js",

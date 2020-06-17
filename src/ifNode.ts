@@ -10,9 +10,11 @@ export class IFNode extends Node {
         return true
     }
 
-    positiveStatement() {}
+    // tslint:disable-next-line: no-empty
+    positiveStatement() { }
 
-    negativeStatement() {}
+    // tslint:disable-next-line: no-empty
+    negativeStatement() { }
 
     async run() {
         const ret = !!this.expression()
