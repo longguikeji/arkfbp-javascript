@@ -1,22 +1,80 @@
-# ArkFBP-JavaScript
+- [1. ArkFBP-JavaScript](#1-arkfbp-javascript)
+- [2. 简介 Introduction](#2-简介-introduction)
+- [3. 快速上手 QuickStart](#3-快速上手-quickstart)
+  - [3.1. 安装环境 SetUp](#31-安装环境-setup)
+    - [3.1.1. 安装Arkfbp Tooling Install ArkFBP Tooling](#311-安装arkfbp-tooling-install-arkfbp-tooling)
+    - [3.1.2. 安装VScode ArkFBP扩展 Install VSCode ArkFBP Extension](#312-安装vscode-arkfbp扩展-install-vscode-arkfbp-extension)
+  - [3.2. 创建第一个项目 Create your first project](#32-创建第一个项目-create-your-first-project)
+  - [3.3. 构建项目 Build the project](#33-构建项目-build-the-project)
+  - [3.4. 运行项目 Launch the project](#34-运行项目-launch-the-project)
+    - [3.4.3. 以WEBServer的方式启动 Run as the WEBServer](#343-以webserver的方式启动-run-as-the-webserver)
+    - [3.4.4. 启动单条流 # Run individual flow](#344-启动单条流--run-individual-flow)
+  - [3.5. 项目目录结构](#35-项目目录结构)
+  - [3.6. flow的结构](#36-flow的结构)
+  - [3.7. 流程图的定义](#37-流程图的定义)
+    - [3.7.5. 流程图参数](#375-流程图参数)
+  - [3.8. 「流」级别的全局变量](#38-流级别的全局变量)
+- [4. 基础节点用法](#4-基础节点用法)
+  - [4.9. 开始节点（StartNode）](#49-开始节点startnode)
+    - [4.9.6. 流程图参数](#496-流程图参数)
+    - [4.9.7. 节点参数](#497-节点参数)
+    - [4.9.8. 重载函数](#498-重载函数)
+  - [4.10. 结束节点（StopNode）](#410-结束节点stopnode)
+    - [4.10.9. 流程图参数](#4109-流程图参数)
+    - [4.10.10. 节点参数](#41010-节点参数)
+    - [4.10.11. 重载函数](#41011-重载函数)
+  - [4.11. 函数节点（FunctionNode）](#411-函数节点functionnode)
+    - [4.11.12. 流程图参数](#41112-流程图参数)
+    - [4.11.13. 节点参数](#41113-节点参数)
+    - [4.11.14. 重载函数](#41114-重载函数)
+  - [4.12. 条件节点（IFNode）](#412-条件节点ifnode)
+    - [4.12.15. 流程图参数](#41215-流程图参数)
+    - [4.12.16. 节点参数](#41216-节点参数)
+    - [4.12.17. 重载函数](#41217-重载函数)
+  - [4.13. Switch节点（SwitchNode）](#413-switch节点switchnode)
+    - [4.13.18. 流程图参数](#41318-流程图参数)
+    - [4.13.19. 节点参数](#41319-节点参数)
+    - [4.13.20. 重载函数](#41320-重载函数)
+  - [4.14. API节点（APINode）](#414-api节点apinode)
+    - [4.14.21. 流程图参数](#41421-流程图参数)
+    - [4.14.22. 节点参数](#41422-节点参数)
+    - [4.14.23. 重载函数](#41423-重载函数)
+  - [4.15. 循环节点（LoopNode）](#415-循环节点loopnode)
+    - [4.15.24. 流程图参数](#41524-流程图参数)
+    - [4.15.25. 节点参数](#41525-节点参数)
+    - [4.15.26. 重载函数](#41526-重载函数)
+  - [4.16. 流节点（FlowNode）](#416-流节点flownode)
+    - [4.16.27. 流程图参数](#41627-流程图参数)
+    - [4.16.28. 节点参数](#41628-节点参数)
+    - [4.16.29. 重载函数](#41629-重载函数)
+  - [4.17. 测试节点（TestNode）](#417-测试节点testnode)
+    - [4.17.30. 流程图参数](#41730-流程图参数)
+    - [4.17.31. 节点参数](#41731-节点参数)
+    - [4.17.32. 重载函数](#41732-重载函数)
+  - [4.18. 空节点（NopNode）](#418-空节点nopnode)
+    - [4.18.33. 流程图参数](#41833-流程图参数)
+    - [4.18.34. 节点参数](#41834-节点参数)
+    - [4.18.35. 重载函数](#41835-重载函数)
+
+# 1. ArkFBP-JavaScript
 
 ArkFBP-JavaScript是一个ArkFBP的JS的实现。
 
 
-# 简介 Introduction
+# 2. 简介 Introduction
 
 ArkFBP是一个基于Flow-Based Programming的一个开发框架，目前有JavaScript，Python，Golang等几个不同版本。
 
 
-# 快速上手 QuickStart
+# 3. 快速上手 QuickStart
 
-## 安装环境 SetUp
+## 3.1. 安装环境 SetUp
 
-### 安装Arkfbp Tooling Install ArkFBP Tooling
+### 3.1.1. 安装Arkfbp Tooling Install ArkFBP Tooling
 
 1. 下载arkfbp预编译文件 Download precompiled arkfbp cli binary
 
-    `wget `[`https://github.com/arkfbp/arkfbp/releases/download/0.0.3-rc/arkfbp-darwin`](https://github.com/arkfbp/arkfbp/releases/download/0.0.3-rc/arkfbp-darwin)
+    `wget https://github.com/arkfbp/arkfbp/releases/download/0.0.3-rc/arkfbp-darwin`
 
 2. 给二进制文件赋予执行权限 Give the execution permission
 
@@ -27,7 +85,7 @@ ArkFBP是一个基于Flow-Based Programming的一个开发框架，目前有Java
     `move arkfbp-darwin /usr/local/bin/arkfbp`
 
 
-### 安装VScode ArkFBP扩展 Install VSCode ArkFBP Extension
+### 3.1.2. 安装VScode ArkFBP扩展 Install VSCode ArkFBP Extension
 
 1. 下载扩展文件 Download VSCode Extension File
 
@@ -38,20 +96,20 @@ ArkFBP是一个基于Flow-Based Programming的一个开发框架，目前有Java
     [https://vscode-docs.readthedocs.io/en/stable/extensions/install-extension/](https://vscode-docs.readthedocs.io/en/stable/extensions/install-extension/)
 
 
-## 创建第一个项目 Create your first project
+## 3.2. 创建第一个项目 Create your first project
 
 `arkfbp create --type server --language javascript --name helloworld`
 
-## 构建项目 Build the project
+## 3.3. 构建项目 Build the project
 
-## 运行项目 Launch the project
+## 3.4. 运行项目 Launch the project
 
-### 以WEBServer的方式启动 Run as the WEBServer
+### 3.4.3. 以WEBServer的方式启动 Run as the WEBServer
 
-### 启动单条流 # Run individual flow
+### 3.4.4. 启动单条流 # Run individual flow
 
 
-## 项目目录结构
+## 3.5. 项目目录结构
 用arkfbp cli工具([https://github.com/longguikeji/arkfbp](https://github.com/longguikeji/arkfbp))创建一个js项目后，项目主体代码均在src目录中。
 
 ```javascript
@@ -65,14 +123,14 @@ src //源代码根目录，@
 
 所有flow都应该创建在flows目录中。
 
-## flow的结构
+## 3.6. flow的结构
 
 1. 每一个flow都由一个目录组成，目录名即为流的名字。
 2. 在flow的根目录下的index.js文件中，定义了该流的『图』。
 3. flow目录下有nodes目录，其中存放所有该流所包含的节点定义。
 4. 每个节点都是一个js文件，用面向对象的方式继承自某个基础节点。
 
-## 流程图的定义
+## 3.7. 流程图的定义
 ```javascript
 
 import { Flow } from 'arkfbp/lib/flow'
@@ -114,7 +172,7 @@ export class Main extends Flow {
 
 在```createNodes```方法中，return的数据中包含了图的定义。个我们统一定义为 flow chart params，节点的**流程图参数**。
 
-### 流程图参数
+### 3.7.5. 流程图参数
 | 参数名 | 类型   | 含义           | 示例                                                         |
 | ------ | ------ | -------------- | ------------------------------------------------------------ |
 | cls    | Class  | 节点类型       | cls: StartNode<br />cls: xxxxNode（xxxNode为某个Node的子类） |
@@ -123,7 +181,7 @@ export class Main extends Flow {
 
 一些特殊节点会有特殊的参数，如LoopNode的body。参见每个节点说明。
 
-## 「流」级别的全局变量
+## 3.8. 「流」级别的全局变量
 
 一个能在流内任意节点读写的变量，```this.$state```. 该变量不能直接使用，通过各种方法来进行读写。
 
@@ -134,49 +192,49 @@ export class Main extends Flow {
 
 
 
-# 基础节点用法
+# 4. 基础节点用法
 
 1. 节点的用法，需要先继承基础节点，然后确定该节点的参数与重载函数，最后在流程图中定义好该节点的流程图参数即可。
 2. 所有节点都有一个共同的重载函数```run```，作为节点运行的主函数。
 3. ```run```函数的返回值会成为该节点的```outputs```，即下一个节点的```inputs```。
 4. 节点参数仅支持静态值，对节点内部如this.inputs或this.$state等值的访问都只能在函数中进行。
 
-## 开始节点（StartNode）
+## 4.9. 开始节点（StartNode）
 
-### 流程图参数
+### 4.9.6. 流程图参数
 [cls，id，next]
 
-### 节点参数
+### 4.9.7. 节点参数
 无
 
-### 重载函数
+### 4.9.8. 重载函数
 | 函数名 | 描述                                           | 是否必须重载 | 示例                                                                 |
 | ------ | ---------------------------------------------- | ------------ | -------------------------------------------------------------------- |
 | run()  | 作为节点运行主函数，默认功能是将inputs直接返回 | 否           | 一般不用，可在此函数中做一些对数据的预处理。<br />参考[FunctionNode] |
 
-## 结束节点（StopNode）
-### 流程图参数
+## 4.10. 结束节点（StopNode）
+### 4.10.9. 流程图参数
 [cls，id，next]
 
-### 节点参数
+### 4.10.10. 节点参数
 无
 
-### 重载函数
+### 4.10.11. 重载函数
 | 函数名 |                      描述                      | 是否必须重载 |                                    示例                                    |
 | :----: | :--------------------------------------------: | :----------: | :------------------------------------------------------------------------: |
 | run()  | 作为节点运行主函数，默认功能是将inputs直接返回 |      否      | 一般不用，可在此函数中完成对流的返回值的最后整理。<br />参考[FunctionNode] |
 
 <br />
 
-## 函数节点（FunctionNode）
+## 4.11. 函数节点（FunctionNode）
 
-### 流程图参数
+### 4.11.12. 流程图参数
 [cls，id，next]
 
-### 节点参数
+### 4.11.13. 节点参数
 无
 
-### 重载函数
+### 4.11.14. 重载函数
 | 函数名 |        描述        | 是否必须重载 |
 | :----: | :----------------: | :----------: |
 | run()  | 作为节点运行主函数 |      是      |
@@ -198,9 +256,9 @@ export class CaseNode extends FunctionNode {
 }
 ```
 
-## 条件节点（IFNode）
+## 4.12. 条件节点（IFNode）
 
-### 流程图参数
+### 4.12.15. 流程图参数
 [cls，id]
 
 **注意：IFNode没有next**
@@ -210,10 +268,10 @@ export class CaseNode extends FunctionNode {
 | positiveNext | String | 当expression返回值为true时，会运行的下一个节点id  | positiveNext：'4'    |
 | negativeNext | String | 当expression返回值为false时，会运行的下一个节点id | negativeNext: 'stop' |
 
-### 节点参数
+### 4.12.16. 节点参数
 无
 
-### 重载函数
+### 4.12.17. 重载函数
 |   函数名    |              描述               | 是否必须重载 |
 | :---------: | :-----------------------------: | :----------: |
 |    run()    |       作为节点运行主函数        |      是      |
@@ -241,45 +299,44 @@ export class MyIFNode extends IFNode {
 }
 ```
 
-<a name="zFJEQ"></a>
-## Switch节点（SwitchNode）
+## 4.13. Switch节点（SwitchNode）
 实现多条件分支的逻辑，满足任一条件后，剩余的部分将不会被执行
-<a name="HSi2n"></a>
-### 流程图参数
+
+### 4.13.18. 流程图参数
 [cls，id](#emXYO)<br />注意：SwitchNode没有next
 
-| 参数名 | 类型 | 含义 | 示例 |
-| --- | --- | --- | --- |
-| route | [] | 是个数组，每一项即为一个条件 | {
-    cls: MySwitchNode,
-    id: "1",
-    route: [
-        {
-            'condition': 'condition1',
-            'positive': 'positive1',
-            'negative': 'negative1',
-            'next': '2',
-        },
-        {
-            'condition': 'condition2',
-            'positive': 'positive2',
-            'negative': 'negative2',
-            'next': '3',
-        },
-        {
-            'condition': 'condition3',
-            'positive': 'positive3',
-            'negative': 'negative3',
-            'next': '4',
-        },
-    ]
-} |
+| 参数名 | 类型 | 含义                         | 示例                       |
+| ------ | ---- | ---------------------------- | -------------------------- |
+| route  | []   | 是个数组，每一项即为一个条件 | {                          |
+|        |      |                              | ```cls: MySwitchNode,      |
+|        |      |                              | id: "1",                   |
+|        |      |                              | route: [                   |
+|        |      |                              | {                          |
+|        |      |                              | 'condition': 'condition1', |
+|        |      |                              | 'positive': 'positive1',   |
+|        |      |                              | 'negative': 'negative1',   |
+|        |      |                              | 'next': '2',               |
+|        |      |                              | },                         |
+|        |      |                              | {                          |
+|        |      |                              | 'condition': 'condition2', |
+|        |      |                              | 'positive': 'positive2',   |
+|        |      |                              | 'negative': 'negative2',   |
+|        |      |                              | 'next': '3',               |
+|        |      |                              | },                         |
+|        |      |                              | {                          |
+|        |      |                              | 'condition': 'condition3', |
+|        |      |                              | 'positive': 'positive3',   |
+|        |      |                              | 'negative': 'negative3',   |
+|        |      |                              | 'next': '4',               |
+|        |      |                              | },                         |
+|        |      |                              | ]                          |
+|        |      |                              | }```                       |
 
 <a name="UNdcA"></a>
-### 节点参数
+### 4.13.19. 节点参数
 无
 <a name="Txi51"></a>
-### 重载函数
+### 4.13.20. 重载函数
 无<br />示例：
 ```typescript
 import { SwitchNode } from 'arkfbp/lib/switchNode'
@@ -326,12 +383,12 @@ export class MySwitchNode extends IFNode {
 ```
 
 
-## API节点（APINode）
+## 4.14. API节点（APINode）
 
-### 流程图参数
+### 4.14.21. 流程图参数
 [cls，id，next]
 
-### 节点参数
+### 4.14.22. 节点参数
 | 参数名  |      类型       | 是否必须 |                         描述                         |                                                                                                                             示例                                                                                                                             |
 | :-----: | :-------------: | :------: | :--------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |  mode   |     string      |    是    |   请求方式，可选值：direct，proxy, 默认值为direct    |                                                                                     mode: proxy（通过ArkOS的APIserver发送请求）<br />mode: direct（直接向目标发送请求）                                                                                      |
@@ -342,7 +399,7 @@ export class MySwitchNode extends IFNode {
 | params  | any &#124; null |    否    |      http请求的参数，可由buildParams()函数代替       |                                                                                                                      params: 'a=1&b=2'                                                                                                                       |
 
 
-### 重载函数
+### 4.14.23. 重载函数
 |    函数名     |        描述        |              是否必须重载              |
 | :-----------: | :----------------: | :------------------------------------: |
 |     run()     | 作为节点运行主函数 |                   否                   |
@@ -371,9 +428,9 @@ export class PostAPINode extends APINode {
 ```
 
 
-## 循环节点（LoopNode）
+## 4.15. 循环节点（LoopNode）
 
-### 流程图参数
+### 4.15.24. 流程图参数
 [cls，id，next]
 
 | 参数名 | 类型   | 含义   | 示例                                                       |
@@ -381,10 +438,10 @@ export class PostAPINode extends APINode {
 | body   | Number | String | 循环体的下一个节点，从这个节点开始的后续节点都是在循环体内 | body：4 |
 
 
-### 节点参数
+### 4.15.25. 节点参数
 无
 
-### 重载函数
+### 4.15.26. 重载函数
 |        函数名        |                   描述                   | 是否必须重载 |
 | :------------------: | :--------------------------------------: | :----------: |
 |   initStatement()    |            初始化状态(i = 0)             |      是      |
@@ -420,18 +477,18 @@ export class LoopSendNode extends LoopNode {
 ```
 
 
-## 流节点（FlowNode）
+## 4.16. 流节点（FlowNode）
 
-### 流程图参数
+### 4.16.27. 流程图参数
 [cls，id，next]
 
-### 节点参数
+### 4.16.28. 节点参数
 | 参数名 | 类型  | 是否必须 |     描述     | 示例  |
 | :----: | :---: | :------: | :----------: | :---: |
 |  flow  | Flow  |    是    | 需要运行的流 |       |
 
 <a name="B2QOV"></a>
-### 重载函数
+### 4.16.29. 重载函数
 |    函数名     |         描述         | 是否必须重载 |
 | :-----------: | :------------------: | :----------: |
 | buildInputs() | 构建运行flow时的输入 |      否      |
@@ -452,19 +509,19 @@ export class RunFooBarFlowNode extends TriggerFlowNode {
 }
 ```
 
-## 测试节点（TestNode）
+## 4.17. 测试节点（TestNode）
 
-### 流程图参数
+### 4.17.30. 流程图参数
 [cls，id，next]
 
-### 节点参数
+### 4.17.31. 节点参数
 | 参数名 |  类型  | 是否必须 |                             描述                             |    示例    |
 | :----: | :----: | :------: | :----------------------------------------------------------: | :--------: |
 |  flow  |  Flow  |    是    |                       需要测试的流的类                       |            |
 | start  | String |    否    | 测试目标流的起始节点id<br />，为空则代表从流的第一个节点开始 | start: '5' |
 |  stop  | String |    否    |      测试目标流的结束节点id<br />，为空则代表直到流结束      |  stop:'6'  |
 
-### 重载函数
+### 4.17.32. 重载函数
 |          函数名          |                            描述                            |   是否必须重载    |
 | :----------------------: | :--------------------------------------------------------: | :---------------: |
 |         setUp()          |         在所有case执行前执行，可以用来准备测试数据         |        否         |
@@ -527,14 +584,14 @@ export class Node1 extends TestNode {
 ```
 
 
-## 空节点（NopNode）
+## 4.18. 空节点（NopNode）
 什么也不做
 
-### 流程图参数
+### 4.18.33. 流程图参数
 [cls，id，next](#emXYO)
 
-### 节点参数
+### 4.18.34. 节点参数
 无
 
-### 重载函数
+### 4.18.35. 重载函数
 无
