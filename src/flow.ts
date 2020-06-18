@@ -10,9 +10,9 @@ import { NodeIDType, NodeType } from './node'
 import { Request } from './request'
 import { Response } from './response'
 import { State } from './state'
+import { SwitchNode } from './switchNode'
 import { TestNode } from './testNode'
 import { isAsync } from './utils'
-import { SwitchNode } from './switchNode'
 
 export class Flow {
 
@@ -335,6 +335,11 @@ export async function runWorkflow(flow: Flow, inputs?: any) {
     if (flow.hasOwnProperty('beforeExecute')) {
         flow.beforeExecute()
     }
+
+    if (typeof inputs === 'undefined' && flow.request !== null) {
+        inputs = flow.request.params
+    }
+
     const ret = await flow.main(inputs)
     if (flow.hasOwnProperty('executed')) {
         flow.executed()

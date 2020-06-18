@@ -81,6 +81,7 @@ export class Request {
         for (const key in req.query) {
             if (req.query.hasOwnProperty(key)) {
                 this.queryParams[key] = req.query[key]
+                this.params[name] = this.queryParams[key]
             }
         }
 
