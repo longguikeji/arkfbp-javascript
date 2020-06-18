@@ -13,7 +13,9 @@ export class APINode extends Node {
     headers: any | null = null
     params: any | null = null
 
-    buildParams?: () => {}
+    async buildParams() {
+        return this.params
+    }
 
     /**
      * API Node执行结果，方便重载的时候获取更多除了data的额外信息
@@ -38,9 +40,10 @@ export class APINode extends Node {
         }
     }
 
-    _getParams(): any {
+    async _getParams() {
         if (typeof this.buildParams !== 'undefined') {
-            return this.buildParams()
+            const params = await this.buildParams()
+            return params
         }
 
         return this.params
@@ -51,10 +54,16 @@ export class APINode extends Node {
             url: this.url,
             headers: this.headers,
             method: this.method as Method,
-            data: this._getParams(),
+            data: await this._getParams(),
         }
 
-        const resp = await axios(options)
+        let resp: any
+
+        try {
+            resp = await axios(options)
+        } catch (err) {
+            console.error('>><<><', err.toJSON())
+        }
 
         this.resp = {
             status: resp.status,

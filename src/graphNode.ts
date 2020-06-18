@@ -3,8 +3,9 @@ import { Node, NodeIDType, NodeType } from './node'
 export class GraphNode {
   id?: NodeIDType
   cls?: NodeType
-  next?: string | number
-  errorNext?: string
+
+  next?: NodeIDType
+  errorNext?: NodeIDType
 
   positiveNext?: NodeIDType
   negativeNext?: NodeIDType
@@ -12,7 +13,9 @@ export class GraphNode {
   // body?: NodeIDType | [NodeIDType, NodeIDType]
   body?: NodeIDType
 
-  constructor(id?: string, cls?: NodeType, next?: string, positiveNext?: string, negativeNext?: string) {
+  route?: any
+
+  constructor(id?: NodeIDType, cls?: NodeType, next?: NodeIDType, positiveNext?: NodeIDType, negativeNext?: NodeIDType) {
     this.id = id
     this.cls = cls
     this.next = next

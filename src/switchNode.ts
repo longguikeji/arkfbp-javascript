@@ -39,19 +39,22 @@ export class SwitchNode extends Node {
                 ret = cond
             } else {
                 if (typeof condFunction !== 'undefined') {
-                    ret = condFunction()
+                    ret = condFunction.bind(this)()
                 }
             }
 
             if (ret) {
+                this.next = condition.next
+
                 if (typeof positiveFunction !== 'undefined') {
-                    this.next = condition.next
-                    return (positiveFunction as Function)()
+                    return (positiveFunction as Function).bind(this)()
                 }
+
+                return
             } else {
                 if (typeof negativeFunction !== 'undefined') {
                     // do not return here
-                    (negativeFunction as Function)()
+                    (negativeFunction as Function).bind(this)()
                 }
             }
 

@@ -12,6 +12,7 @@ import { Response } from './response'
 import { State } from './state'
 import { TestNode } from './testNode'
 import { isAsync } from './utils'
+import { SwitchNode } from './switchNode'
 
 export class Flow {
 
@@ -92,11 +93,11 @@ export class Flow {
         return new Graph()
     }
 
-    // tslint:disable-next-line: no-empty
     init() { }
 
     getNextGraphNode(graphNode: GraphNode, node: any): GraphNode | null {
         let nextGraphNodeId
+
         if (node instanceof IFNode) {
             // IF Node has two potential next and the ret stored current statement evaluated result
             if (node.ret) {
@@ -104,6 +105,8 @@ export class Flow {
             } else {
                 nextGraphNodeId = graphNode.negativeNext
             }
+        } else if (typeof node.next !== 'undefined' && node.next !== null) {
+            nextGraphNodeId = node.next
         } else {
             nextGraphNodeId = graphNode.next
         }
@@ -157,6 +160,10 @@ export class Flow {
 
             node.$options = this._userOptions
 
+            if (node.name === 'switch') {
+                (node as SwitchNode).route = graphNode.route
+            }
+
             if (node.hasOwnProperty('created')) {
                 await node.created()
             }
@@ -203,7 +210,6 @@ export class Flow {
             try {
                 outputs = await node.run()
             } catch (err) {
-                // @Todo: 节点增加error属性，用于指定发生异常错误的处理节点
                 if (typeof graphNode.errorNext !== 'undefined') {
                     this._status = 'RUNNING'
                     errorNodeId = graphNode.errorNext
@@ -292,15 +298,10 @@ export class Flow {
         writeFileSync(this._debugStatePersistentFile, JSON.stringify(data))
     }
 
-    // tslint:disable-next-line: no-empty
     beforeInitialize() { }
-    // tslint:disable-next-line: no-empty
     initialized() { }
-    // tslint:disable-next-line: no-empty
     beforeExecute() { }
-    // tslint:disable-next-line: no-empty
     executed() { }
-    // tslint:disable-next-line: no-empty
     beforeDestroy() { }
 }
 
