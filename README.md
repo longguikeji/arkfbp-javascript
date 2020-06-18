@@ -207,9 +207,11 @@ export class MySwitchNode extends IFNode {
   	condition1() {
         return this.inputs.a == 1
     }
+
     postive1() {
         // put any logic here
     }
+
     negative1() {
         // put any logic here
     }
@@ -217,9 +219,11 @@ export class MySwitchNode extends IFNode {
     condition2() {
         return this.inputs.a == 2
     }
+
     postive2() {
         // put any logic here
     }
+
     negative2() {
         // put any logic here
     }
@@ -227,9 +231,11 @@ export class MySwitchNode extends IFNode {
     condition3() {
         return this.inputs.a == 3
     }
+
     postive3() {
         // put any logic here
     }
+
     negative3() {
         // put any logic here
     }
