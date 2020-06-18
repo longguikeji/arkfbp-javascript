@@ -2,6 +2,55 @@
 
 ArkFBP-JavaScript是一个ArkFBP的JS的实现。
 
+
+# 简介 Introduction
+
+ArkFBP是一个基于Flow-Based Programming的一个开发框架，目前有JavaScript，Python，Golang等几个不同版本。
+
+
+# 快速上手 QuickStart
+
+## 安装环境 SetUp
+
+### 安装Arkfbp Tooling Install ArkFBP Tooling
+
+1. 下载arkfbp预编译文件 Download precompiled arkfbp cli binary
+
+    `wget `[`https://github.com/arkfbp/arkfbp/releases/download/0.0.3-rc/arkfbp-darwin`](https://github.com/arkfbp/arkfbp/releases/download/0.0.3-rc/arkfbp-darwin)
+
+2. 给二进制文件赋予执行权限 Give the execution permission
+
+    `chmod +x arkfbp`
+
+3. 将文件移动到系统PATH目录下 Move the arkfbp cli to the OS Path
+
+    `move arkfbp-darwin /usr/local/bin/arkfbp`
+
+
+### 安装VScode ArkFBP扩展 Install VSCode ArkFBP Extension
+
+1. 下载扩展文件 Download VSCode Extension File
+
+    [https://github.com/arkfbp/arkfbp/releases/download/0.0.3-rc/arkfbp-0.0.3.vsix](https://github.com/arkfbp/arkfbp/releases/download/0.0.3-rc/arkfbp-0.0.3.vsix)
+
+1. 安装扩展文件 Install the arkfbp Extension
+
+    [https://vscode-docs.readthedocs.io/en/stable/extensions/install-extension/](https://vscode-docs.readthedocs.io/en/stable/extensions/install-extension/)
+
+
+## 创建第一个项目 Create your first project
+
+`arkfbp create --type server --language javascript --name helloworld`
+
+## 构建项目 Build the project
+
+## 运行项目 Launch the project
+
+### 以WEBServer的方式启动 Run as the WEBServer
+
+### 启动单条流 # Run individual flow
+
+
 ## 项目目录结构
 用arkfbp cli工具([https://github.com/longguikeji/arkfbp](https://github.com/longguikeji/arkfbp))创建一个js项目后，项目主体代码均在src目录中。
 
