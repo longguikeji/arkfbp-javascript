@@ -15,7 +15,7 @@
       "allow-declarations",
       "allow-named-functions"
     ],
-    "no-empty": true,
+    "no-empty": false,
     "prefer-for-of": true,
     "indent": [true, "spaces", 2],
     "promise-function-async": true,
