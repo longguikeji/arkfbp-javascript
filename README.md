@@ -204,7 +204,7 @@ import { SwitchNode } from 'arkfbp/lib/switchNode'
 
 export class MySwitchNode extends IFNode {
 
-  	condition1() {
+    condition1() {
         return this.inputs.a === 1
     }
 
