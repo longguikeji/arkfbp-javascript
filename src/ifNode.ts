@@ -10,20 +10,18 @@ export class IFNode extends Node {
         return true
     }
 
-    // tslint:disable-next-line: no-empty
-    positiveStatement() { }
+    positive() { }
 
-    // tslint:disable-next-line: no-empty
-    negativeStatement() { }
+    negative() { }
 
     async run() {
         const ret = !!this.expression()
         this.ret = ret
 
         if (ret) {
-            return this.positiveStatement()
+            return this.positive()
         }
 
-        return this.negativeStatement()
+        return this.negative()
     }
 }
