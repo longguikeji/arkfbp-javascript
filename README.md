@@ -192,14 +192,47 @@ export class MyIFNode extends IFNode {
 }
 ```
 
+<a name="zFJEQ"></a>
 ## Switch节点（SwitchNode）
 实现多条件分支的逻辑，满足任一条件后，剩余的部分将不会被执行
-
+<a name="HSi2n"></a>
 ### 流程图参数
-[cls，id，next]
+[cls，id](#emXYO)<br />注意：SwitchNode没有next
 
-示例：
-```javascript
+| 参数名 | 类型 | 含义 | 示例 |
+| --- | --- | --- | --- |
+| route | [] | 是个数组，每一项即为一个条件 | {
+    cls: MySwitchNode,
+    id: "1",
+    route: [
+        {
+            'condition': 'condition1',
+            'positive': 'positive1',
+            'negative': 'negative1',
+            'next': '2',
+        },
+        {
+            'condition': 'condition2',
+            'positive': 'positive2',
+            'negative': 'negative2',
+            'next': '3',
+        },
+        {
+            'condition': 'condition3',
+            'positive': 'positive3',
+            'negative': 'negative3',
+            'next': '4',
+        },
+    ]
+} |
+
+<a name="UNdcA"></a>
+### 节点参数
+无
+<a name="Txi51"></a>
+### 重载函数
+无<br />示例：
+```typescript
 import { SwitchNode } from 'arkfbp/lib/switchNode'
 
 export class MySwitchNode extends IFNode {
@@ -242,37 +275,6 @@ export class MySwitchNode extends IFNode {
 
 }
 ```
-
-在流的定义中
-```javascript
-
-{
-    cls: MySwitchNode,
-    id: "1",
-    route: [
-        {
-            'condition': 'condition1',
-            'positive': 'positive1',
-            'negative': 'negative1',
-            'next': '2',
-        },
-        {
-            'condition': 'condition2',
-            'positive': 'positive2',
-            'negative': 'negative2',
-            'next': '3',
-        },
-        {
-            'condition': 'condition3',
-            'positive': 'positive3',
-            'negative': 'negative3',
-            'next': '4',
-        },
-    ]
-}
-
-```
-
 
 
 ## API节点（APINode）
