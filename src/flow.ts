@@ -198,25 +198,31 @@ export class Flow {
             }
 
             let outputs
+            let errorNodeId = null
 
             try {
                 outputs = await node.run()
             } catch (err) {
-                console.log(chalk.red.underline(`\n>>> #STEP-${this._step} NODE[#${node.id}]ERROR`))
-                console.log('\t', chalk.bgGray(`Inputs: ${JSON.stringify(lastOutputs)}`))
-                console.log('\t', chalk.bgMagenta(`App State: ${JSON.stringify(this._appState?.fetch())}`))
-                console.log('\t', chalk.bgBlue(`Flow State: ${JSON.stringify(this._state?.fetch())}`))
-                console.log('\t', chalk.bgCyan(`Outputs: ${JSON.stringify(node.outputs)}`))
-
-                const regEx = new RegExp(`${process.cwd()}\\/(?!node_modules\\/)([\\/\\w-_\\.]+\\.js):(\\d*):(\\d*)`)
-                const [, filename, line, column] = err.stack.match(regEx)
-
-                console.log('\t', chalk.bgRed(`Error: ${err.name} ${err.message} ${filename}:${line}:${column}`))
-
-                this._status = 'ERROR'
-
                 // @Todo: 节点增加error属性，用于指定发生异常错误的处理节点
-                break
+                if (typeof graphNode.errorNext !== 'undefined') {
+                    this._status = 'RUNNING'
+                    errorNodeId = graphNode.errorNext
+                    outputs = err
+                } else {
+                    console.log(chalk.red.underline(`\n>>> #STEP#${this._step} NODE[#${node.id}]ERROR`))
+                    console.log('\t', chalk.bgGray(`Inputs: ${JSON.stringify(lastOutputs)}`))
+                    console.log('\t', chalk.bgMagenta(`App State: ${JSON.stringify(this._appState?.fetch())}`))
+                    console.log('\t', chalk.bgBlue(`Flow State: ${JSON.stringify(this._state?.fetch())}`))
+                    console.log('\t', chalk.bgCyan(`Outputs: ${JSON.stringify(node.outputs)}`))
+
+                    const regEx = new RegExp(`${process.cwd()}\\/(?!node_modules\\/)([\\/\\w-_\\.]+\\.js):(\\d*):(\\d*)`)
+                    const [, filename, line, column] = err.stack.match(regEx)
+
+                    console.log('\t', chalk.bgRed(`Error: ${err.name} ${err.message} ${filename}:${line}:${column}`))
+
+                    this._status = 'ERROR'
+                    break
+                }
             }
 
             /**
@@ -226,7 +232,7 @@ export class Flow {
 
             if (this._status === 'RUNNING') {
                 if (this._verbose) {
-                    console.log(chalk.green.underline(`\n>>> #STEP - ${this._step} NODE[#${node.id}:${node.name}]SUCCESS`))
+                    console.log(chalk.green.underline(`\n>>> #STEP#${this._step} NODE[#${node.id}:${node.name}]SUCCESS`))
                     console.log('\t', chalk.bgGray(`Inputs: ${JSON.stringify(node.inputs)}`))
                     console.log('\t', chalk.bgMagenta(`App State: ${JSON.stringify(this._appState?.fetch())}`))
                     console.log('\t', chalk.bgBlue(`Flow State: ${JSON.stringify(this._state?.fetch())}`))
@@ -254,7 +260,11 @@ export class Flow {
                 shouldStop = true
             }
 
-            graphNode = this.getNextGraphNode(graphNode, node)
+            if (errorNodeId) {
+                graphNode = this._graph.getNodeById(errorNodeId)
+            } else {
+                graphNode = this.getNextGraphNode(graphNode, node)
+            }
 
             if (graphNode === null) {
                 shouldStop = true

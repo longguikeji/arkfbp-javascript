@@ -4,6 +4,7 @@ export class GraphNode {
   id?: NodeIDType
   cls?: NodeType
   next?: string | number
+  errorNext?: string
 
   positiveNext?: NodeIDType
   negativeNext?: NodeIDType
