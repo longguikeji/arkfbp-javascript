@@ -10,11 +10,27 @@ export class Node {
         this._outputs = v
     }
 
+    get $outputs() {
+        return this._outputs
+    }
+
+    set $outputs(v: any) {
+        this._outputs = v
+    }
+
     get inputs() {
         return this._inputs
     }
 
     set inputs(v: any) {
+        this._inputs = v
+    }
+
+    get $inputs() {
+        return this._inputs
+    }
+
+    set $inputs(v: any) {
         this._inputs = v
     }
 
