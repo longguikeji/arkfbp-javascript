@@ -205,10 +205,10 @@ import { SwitchNode } from 'arkfbp/lib/switchNode'
 export class MySwitchNode extends IFNode {
 
   	condition1() {
-        return this.inputs.a == 1
+        return this.inputs.a === 1
     }
 
-    postive1() {
+    positive1() {
         // put any logic here
     }
 
@@ -217,10 +217,10 @@ export class MySwitchNode extends IFNode {
     }
 
     condition2() {
-        return this.inputs.a == 2
+        return this.inputs.a === 2
     }
 
-    postive2() {
+    positive2() {
         // put any logic here
     }
 
@@ -229,10 +229,10 @@ export class MySwitchNode extends IFNode {
     }
 
     condition3() {
-        return this.inputs.a == 3
+        return this.inputs.a === 3
     }
 
-    postive3() {
+    positive3() {
         // put any logic here
     }
 
