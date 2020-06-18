@@ -6,7 +6,7 @@ export class IFNode extends Node {
 
     ret: boolean = false
 
-    expression() {
+    condition() {
         return true
     }
 
@@ -15,7 +15,7 @@ export class IFNode extends Node {
     negative() { }
 
     async run() {
-        const ret = !!this.expression()
+        const ret = !!this.condition()
         this.ret = ret
 
         if (ret) {

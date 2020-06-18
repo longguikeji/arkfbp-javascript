@@ -1,7 +1,7 @@
 import { Node } from './node'
 
 interface SwitchCondition {
-    expression: string | boolean
+    condition: string | boolean
     next: string
     positive?: string
     negative?: string
@@ -15,15 +15,16 @@ export class SwitchNode extends Node {
 
     async run() {
         for (const condition of this.route) {
-            const expression = condition.expression
+            const cond = condition.condition
             const next = condition.next
 
-            let expressionFunction: Function | undefined
+            let condFunction: Function | undefined
             let positiveFunction: Function | undefined
             let negativeFunction: Function | undefined
+            let ret = false
 
-            if (typeof expression !== 'boolean') {
-                expressionFunction = this._getFunction(expression as string)
+            if (typeof cond !== 'boolean') {
+                condFunction = this._getFunction(cond as string)
             }
 
             if (typeof condition.positive !== 'undefined') {
@@ -34,18 +35,17 @@ export class SwitchNode extends Node {
                 negativeFunction = this._getFunction(condition.negative as string)
             }
 
-            let ret = false
-
-            if (typeof expression === 'boolean') {
-                ret = expression
+            if (typeof cond === 'boolean') {
+                ret = cond
             } else {
-                if (typeof expressionFunction !== 'undefined') {
-                    ret = expressionFunction()
+                if (typeof condFunction !== 'undefined') {
+                    ret = condFunction()
                 }
             }
 
             if (ret) {
                 if (typeof positiveFunction !== 'undefined') {
+                    this.next = condition.next
                     return (positiveFunction as Function)()
                 }
             } else {
