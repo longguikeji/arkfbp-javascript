@@ -54,7 +54,13 @@ export class APINode extends Node {
             url: this.url,
             headers: this.headers,
             method: this.method as Method,
-            data: await this._getParams(),
+            data: null,
+        }
+        
+        if (this.method === 'GET') {
+            options.params = await this._getParams()
+        } else {
+            options.data = await this._getParams()
         }
 
         let resp: any
