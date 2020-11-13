@@ -124,5 +124,5 @@ export class Node {
     async beforeDestroy(): Promise<void> { }
 }
 
-export type NodeIDType = string
+export type NodeIDType = string | number
 export type NodeType = typeof Node
